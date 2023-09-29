@@ -1,17 +1,21 @@
 import heapq
-import sys
+from enum import Enum
+
+class ErrorCode(Enum):
+    SUCCESS = 0
+    RESERVATION_EXISTS = 1
 
 class ReservationInfo:
     def __init__(self, first_name : str, last_name : str, reservation_number : str):
         self.first_name = first_name
         self.last_name = last_name
         self.reservation_number = reservation_number
-        self.check_in_time = self._queryCheckInTimeFromSouthwest() - 24
+        self.check_in_time = self._getFlightTimeFromSouthwest() - 24
 
     def __lt__(self, other):
         return self.check_in_time < other.check_in_time
     
-    def _queryCheckInTimeFromSouthwest(self):
+    def _getFlightTimeFromSouthwest(self):
         '''Gets the flight time from southwest website
         '''
         # Todo
@@ -28,10 +32,10 @@ class Scheduler:
     def addReservation(self, reservation : ReservationInfo):
         if reservation.reservation_number in self.reservation_numbers:
             print(f"Unable to add reservation number {reservation.reservation_number} since it already exists")
-            return False
+            return ErrorCode.RESERVATION_EXISTS
         self.reservation_numbers.add(reservation.reservation_number)
         heapq.heappush(self.reservation_heap, reservation)
-        return True
+        return ErrorCode.SUCCESS
 
     def deleteReservation(self, reservation_number : str):
         for i, reservation in enumerate(self.reservation_heap):
