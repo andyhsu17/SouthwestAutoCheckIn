@@ -1,7 +1,7 @@
 import sys
-sys.path.append('../src')
-import unittest
+sys.path.append('src')
 from ReservationSystem import *
+import unittest
 from unittest.mock import MagicMock
 
 
@@ -9,9 +9,9 @@ class ReservationSystemProxy(ReservationSystem):
     def __init__(self):
         super().__init__()
 
-    def createReservationForceCheckinTime(self, first_name, last_name, reservation_number, checkin_time):
-        ReservationInfo._getFlightTimeFromSouthwest = MagicMock(return_value=checkin_time + 24)
-        self.createReservation(first_name, last_name, reservation_number)
+    def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, check_in_time):
+        ReservationInfo._get_flight_time_from_southwest= MagicMock(return_value=check_in_time + 24)
+        self.add_reservation(first_name, last_name, reservation_number)
 
 class ReservationSystemTest(unittest.TestCase):
     def setUp(self):
@@ -21,71 +21,81 @@ class ReservationSystemTest(unittest.TestCase):
         pass
 
     def test_get_first_reservation(self):
-        self.assertEqual(self.system.getFirstReservation(), None)
-        self.system.createReservation("Andy", "Hsu", "KNJ653")
-        self.assertEqual(self.system.getFirstReservation().first_name, "Andy")
+        self.assertEqual(self.system.get_first_reservation(), None)
+        self.system.add_reservation("Andy", "Hsu", "KNJ653")
+        self.assertEqual(self.system.get_first_reservation().first_name, "Andy")
 
     def test_create_reservation_scheduler(self):
         self.assertNotEqual(self.system.scheduler, None)
 
     def test_create_reservation_duplicate(self):
-        self.system.createReservation("Andy", "Hsu", "KNJ653")
-        self.assertEqual(self.system.createReservation("Andy", "Hsu", "KNJ653"),\
+        self.system.add_reservation("Andy", "Hsu", "KNJ653")
+        self.assertEqual(self.system.add_reservation("Andy", "Hsu", "KNJ653"),\
                          ErrorCode.RESERVATION_EXISTS)
 
     def test_create_reservation(self):
-        self.system.createReservation("Andy", "Hsu", "KNJ653")
-        self.assertEqual(self.system.getFirstReservation().first_name, "Andy")
-        self.assertEqual(self.system.getNumberOfReservations(), 1)
-        self.system.createReservation("Esther", "Hsu", "KNJ654")
-        self.assertEqual(self.system.getNumberOfReservations(), 2)
-        self.system.createReservation("Candy", "Hsu", "KNl655")
-        self.assertEqual(self.system.getNumberOfReservations(), 3)
-        self.system.createReservation("Tim", "Hsu", "KNJ656")
-        self.assertEqual(self.system.getNumberOfReservations(), 4)
+        self.system.add_reservation("Andy", "Hsu", "KNJ653")
+        self.assertEqual(self.system.get_first_reservation().first_name, "Andy")
+        self.assertEqual(self.system.get_number_of_reservations(), 1)
+        self.system.add_reservation("Esther", "Hsu", "KNJ654")
+        self.assertEqual(self.system.get_number_of_reservations(), 2)
+        self.system.add_reservation("Candy", "Hsu", "KNl655")
+        self.assertEqual(self.system.get_number_of_reservations(), 3)
+        self.system.add_reservation("Tim", "Hsu", "KNJ656")
+        self.assertEqual(self.system.get_number_of_reservations(), 4)
 
     def test_delete_reservations(self):
-        self.system.createReservation("Andy", "Hsu", "KNJ653")
-        self.assertEqual(self.system.getFirstReservation().first_name, "Andy")
-        self.assertEqual(self.system.getNumberOfReservations(), 1)
-        self.system.deleteReservation("KNJ653")
-        self.assertEqual(self.system.getFirstReservation(), None)
-        self.assertEqual(self.system.getNumberOfReservations(), 0)
+        self.system.add_reservation("Andy", "Hsu", "KNJ653")
+        self.assertEqual(self.system.get_first_reservation().first_name, "Andy")
+        self.assertEqual(self.system.get_number_of_reservations(), 1)
+        self.system.delete_reservation("KNJ653")
+        self.assertEqual(self.system.get_first_reservation(), None)
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
 
-        self.system.createReservation("Esther", "Hsu", "L8M194")
-        self.system.createReservation("Candy", "Hsu", "PEE1NA")
-        self.assertEqual(self.system.getNumberOfReservations(), 2)
+        self.system.add_reservation("Esther", "Hsu", "L8M194")
+        self.system.add_reservation("Candy", "Hsu", "PEE1NA")
+        self.assertEqual(self.system.get_number_of_reservations(), 2)
 
-        self.system.deleteReservation("PEE1NA")
-        self.assertEqual(self.system.getNumberOfReservations(), 1)
+        self.system.delete_reservation("PEE1NA")
+        self.assertEqual(self.system.get_number_of_reservations(), 1)
 
-        self.system.createReservation("Tim", "Hsu", "UHR249")
-        self.system.createReservation("Tim", "Hsu", "YTE923")
-        self.system.createReservation("Tim", "Hsu", "NWI093")
-        self.assertEqual(self.system.getNumberOfReservations(), 4)
+        self.system.add_reservation("Tim", "Hsu", "UHR249")
+        self.system.add_reservation("Tim", "Hsu", "YTE923")
+        self.system.add_reservation("Tim", "Hsu", "NWI093")
+        self.assertEqual(self.system.get_number_of_reservations(), 4)
 
-        self.system.deleteReservation("UHR249")
-        self.system.deleteReservation("YTE923")
-        self.system.deleteReservation("NWI093")
-        self.system.deleteReservation("L8M194")
-        self.assertEqual(self.system.getNumberOfReservations(), 0)
+        self.system.delete_reservation("UHR249")
+        self.system.delete_reservation("YTE923")
+        self.system.delete_reservation("NWI093")
+        self.system.delete_reservation("L8M194")
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
+
+    def test_delete_unknown_reservation(self):
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
+        self.assertEqual(self.system.delete_reservation("UHR249"), ErrorCode.UNKNOWN_RESERVATION)
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
+        self.system.add_reservation("Tim", "Hsu", "UHR249")
+        self.assertEqual(self.system.get_number_of_reservations(), 1)
+        self.assertEqual(self.system.delete_reservation("LHR248"), ErrorCode.UNKNOWN_RESERVATION)
+        self.assertEqual(self.system.delete_reservation("UHR249"), ErrorCode.SUCCESS)
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
 
     def test_reservation_heap(self):
-        self.system.createReservationForceCheckinTime("Danny", "Tran", "LNJ653", 0)
-        self.assertEqual(self.system.getFirstReservation().first_name, "Danny")
-        self.assertEqual(self.system.getFirstReservation().check_in_time, 0)
+        self.system.create_reservation_force_check_in_time("Danny", "Tran", "LNJ653", 1)
+        self.assertEqual(self.system.get_first_reservation().first_name, "Danny")
+        self.assertEqual(self.system.get_first_reservation().check_in_time, 1)
 
-        self.system.createReservationForceCheckinTime("Andy", "Hsu", "KNJ653", 1)
-        self.assertEqual(self.system.getFirstReservation().first_name, "Danny")
-        self.assertEqual(self.system.getFirstReservation().check_in_time, 0)
+        self.system.create_reservation_force_check_in_time("Andy", "Hsu", "KNJ653", 2)
+        self.assertEqual(self.system.get_first_reservation().first_name, "Danny")
+        self.assertEqual(self.system.get_first_reservation().check_in_time, 1)
 
-        self.system.createReservationForceCheckinTime("Tim", "Kang", "MNJ653", 2)
-        self.assertEqual(self.system.getFirstReservation().first_name, "Danny")
-        self.assertEqual(self.system.getFirstReservation().check_in_time, 0)
+        self.system.create_reservation_force_check_in_time("Tim", "Kang", "MNJ653", 3)
+        self.assertEqual(self.system.get_first_reservation().first_name, "Danny")
+        self.assertEqual(self.system.get_first_reservation().check_in_time, 1)
 
-        self.system.createReservationForceCheckinTime("Ken", "Ogden", "NNJ653", -1)
-        self.assertEqual(self.system.getFirstReservation().first_name, "Ken")
-        self.assertEqual(self.system.getFirstReservation().check_in_time, -1)
+        self.system.create_reservation_force_check_in_time("Ken", "Ogden", "NNJ653", 0)
+        self.assertEqual(self.system.get_first_reservation().first_name, "Ken")
+        self.assertEqual(self.system.get_first_reservation().check_in_time, 0)
 
 
 
