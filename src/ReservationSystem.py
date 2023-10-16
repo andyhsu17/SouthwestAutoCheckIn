@@ -1,16 +1,17 @@
 import heapq
-from threading import Timer
+import threading
 from enum import Enum
+import time
 
 class ErrorCode(Enum):
-    """ @brief Error code enum
+    """Error code enum
     """
     SUCCESS = 0
     RESERVATION_EXISTS = 1
     UNKNOWN_RESERVATION = 2
 
 class ReservationInfo:
-    """ @brief Class that contains info needed per reservation
+    """Class that contains info needed per reservation
     """
     def __init__(self, first_name : str, last_name : str, reservation_number : str):
         self.first_name = first_name
@@ -22,25 +23,26 @@ class ReservationInfo:
         return self.check_in_time < other.check_in_time
     
     def _get_flight_time_from_southwest(self):
-        """@brief Gets the flight time from southwest website
+        """Gets the flight time from southwest website
         """
         # Todo
         return 24
 
     def get_check_in_time(self):
-        """ @brief Returns the check in time for this reservation
+        """Returns the check in time for this reservation
         """
         return self.check_in_time
 
 class Scheduler:
-    """Class to create, monitor, and handle all reservations to be made"""
+    """Class to create, monitor, and handle all reservations to be made
+    """
     def __init__(self):
         self.reservation_heap = []
         self.reservation_numbers = set()
-        self.t = Timer(10, self.check_for_events)
+        self.thread_list = []
 
     def add_reservation(self, reservation : ReservationInfo):
-        """ Adds a reservation to the system
+        """Adds a reservation to the system
 
         Args:
             reservation (ReservationInfo): Reservation to add
@@ -50,10 +52,13 @@ class Scheduler:
             return ErrorCode.RESERVATION_EXISTS
         self.reservation_numbers.add(reservation.reservation_number)
         heapq.heappush(self.reservation_heap, reservation)
+        # thread = self._create_sleep_thread(reservation.check_in_time)
+        thread = self._create_sleep_thread_epoch(time.time() + 4) # sleep for 4 seconds
+        self.thread_list.append(thread)
         return ErrorCode.SUCCESS
 
     def delete_reservation(self, reservation_number : str):
-        """ deletes a reservation from the system
+        """Deletes a reservation from the system
 
         Args:
             reservation_number (str): Reservation to deletee
@@ -83,6 +88,58 @@ class Scheduler:
 
     def check_for_events(self):
         print("Checking for events")
+
+    def _sleep_until(self, epoch_time):
+        """Sleeps until the specified epoch time.
+
+        Args:
+          epoch_time: The epoch time to sleep until.
+        """
+
+        now = time.time()
+        if epoch_time > now:
+            time.sleep(epoch_time - now)
+        else:
+            print("Error, time to schedule is past current time")
+        print(f"woken up at: {now}")
+
+    def _create_sleep_thread_epoch(self, epoch_time):
+        """Creates a thread that will sleep until the specified epoch time.
+
+        Args:
+
+        Returns:
+          A thread that will sleep until the specified epoch time.
+        """
+
+        thread = threading.Thread(target=self._sleep_until, args=(epoch_time,))
+        thread.daemon = True # deletes thread when finished
+        thread.start()
+        return thread
+
+    def _create_sleep_thread(self, month, day, year, hour, minute, second):
+        """Creates a thread that will sleep until the specified epoch time.
+
+        Args:
+          month: The month of the epoch time.
+          day: The day of the epoch time.
+          year: The year of the epoch time.
+          hour: The hour of the epoch time.
+          minute: The minute of the epoch time.
+          second: The second of the epoch time.
+
+        Returns:
+          A thread that will sleep until the specified epoch time.
+        """
+
+        epoch_time = time.mktime((year, month, day, hour, minute, second, 0, 0, 0))
+        thread = threading.Thread(target=self._sleep_until, args=(epoch_time,))
+        thread.daemon = True # deletes thread when finished
+        thread.start()
+        return thread
+
+    # Example usage:
+
 
 
                 
@@ -132,7 +189,7 @@ class ReservationSystem:
 
 def main():
     system = ReservationSystem()
-
+    system.add_reservation("Andy", "Hsu", "CYA")
     # while True:
     #     pass
 

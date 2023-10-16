@@ -10,7 +10,7 @@ class ReservationSystemProxy(ReservationSystem):
         super().__init__()
 
     def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, check_in_time):
-        ReservationInfo._get_flight_time_from_southwest= MagicMock(return_value=check_in_time + 24)
+        ReservationInfo._get_flight_time_from_southwest=MagicMock(return_value=check_in_time + 24)
         self.add_reservation(first_name, last_name, reservation_number)
 
 class ReservationSystemTest(unittest.TestCase):
