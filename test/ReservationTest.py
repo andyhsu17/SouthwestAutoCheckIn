@@ -2,19 +2,19 @@ import sys
 sys.path.append('src')
 from ReservationSystem import *
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 
 
 class ReservationSystemProxy(ReservationSystem):
-    def __init__(self):
-        super().__init__()
-
+    """ Reservation System inherited class
+    """
     def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, check_in_time):
-        ReservationInfo._get_flight_time_from_southwest=MagicMock(return_value=check_in_time + 24)
+        ReservationInfo._get_flight_time_from_southwest=MagicMock(return_value=check_in_time + (24 * 60 * 60))
         self.add_reservation(first_name, last_name, reservation_number)
 
 class ReservationSystemTest(unittest.TestCase):
     def setUp(self):
+        # Scheduler._create_sleep_thread_epoch=MagicMock(return_value=None)
         self.system = ReservationSystemProxy()
 
     def tearDown(self):
