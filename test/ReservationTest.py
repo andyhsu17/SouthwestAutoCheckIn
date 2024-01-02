@@ -9,7 +9,7 @@ class ReservationSystemProxy(ReservationSystem):
     """ Reservation System inherited class
     """
     def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, check_in_time):
-        ReservationInfo._get_flight_time_from_southwest=MagicMock(return_value=check_in_time + (24 * 60 * 60))
+        SouthwestApi.get_flight_time=MagicMock(return_value=check_in_time + (24 * 60 * 60))
         self.add_reservation(first_name, last_name, reservation_number)
 
 class ReservationSystemTest(unittest.TestCase):
@@ -18,7 +18,7 @@ class ReservationSystemTest(unittest.TestCase):
         self.system = ReservationSystemProxy()
 
     def tearDown(self):
-        pass
+        self.system.__del__()
 
     def test_get_first_reservation(self):
         self.assertEqual(self.system.get_first_reservation(), None)
