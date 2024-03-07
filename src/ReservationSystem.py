@@ -3,28 +3,6 @@ from enum import Enum
 import time
 import threading
 
-class SouthwestApi():
-    def __init__(self):
-        pass
-
-    def get_flight_time(self, reservation_number : str):
-        """Gets the flight time for this reservation from southwest website in epoch time
-        """
-        # Todo
-        return 24 * 60 * 60
-    
-    def post_info_to_southwest(self):
-        """ Posts check in to southwest website
-        """
-        pass
-
-class ErrorCode(Enum):
-    """Error code enum
-    """
-    SUCCESS = 0
-    RESERVATION_EXISTS = 1
-    UNKNOWN_RESERVATION = 2
-
 class ReservationInfo:
     """Class that contains info needed per reservation
     """
@@ -48,7 +26,38 @@ class ReservationInfo:
         """
         return self.check_in_time
 
-class Scheduler:
+class SouthwestApi():
+    def __init__(self):
+        pass
+
+    def get_flight_time(self, reservation_number : str) -> int:
+        """Gets the flight time for this reservation from southwest website in epoch time
+        """
+        # Todo
+        return 0
+        pass
+
+    def check_in_flight(self, reservation : ReservationInfo):
+        self._post_info_to_southwest(reservation.first_name, reservation.last_name, reservation.reservation_number)
+        pass
+
+    def _post_info_to_southwest(self, first_name, last_name, reservation_numbere):
+        """ Posts check in to southwest website
+        """
+        pass
+
+    def _get_info_from_southwest(self):
+        pass
+
+class ErrorCode(Enum):
+    """Error code enum
+    """
+    SUCCESS = 0
+    RESERVATION_EXISTS = 1
+    UNKNOWN_RESERVATION = 2
+
+
+class ReservationManager:
     """Class to create, monitor, and handle all reservations to be made
     """
     def __init__(self):
@@ -104,14 +113,15 @@ class Scheduler:
 
 class ReservationSystem:
     
-    def __init__(self):
+    def __init__(self, debug_level=1):
         # The higher the debug level, the more info we will print
-        self.debug = 1
-        self.scheduler = Scheduler()
+        self.debug = debug_level
+        self.reservation_manager = ReservationManager()
         self.southwest_api = SouthwestApi()
         self.check_in_thread = threading.Thread(target=self._check_in_flight)
         self.run_thread = True
         self.check_in_thread.start()
+        self.polling_time_seconds = 2 # Period to see if its time to check in yet
 
     def __del__(self):
         self.run_thread = False
@@ -121,16 +131,21 @@ class ReservationSystem:
 
     def _check_in_flight(self):
         while self.run_thread is True:
-            if self.scheduler.get_number_of_reservations() == 0:
-                time.sleep(3)
+            if self.reservation_manager.get_number_of_reservations() == 0:
+                self._log2("Thread could not find any reservations in queue, sleeping")
+                time.sleep(2)
                 continue
 
-            if time.time() < self.scheduler.get_first_reservation().check_in_time:
-                time.sleep(3)
+            if time.time() < self.reservation_manager.get_first_reservation().get_check_in_time():
+                reservation = self.reservation_manager.get_first_reservation()
+                self._log2(f"Thread found reservation for {reservation.first_name} {reservation.last_name}, but is not\
+                           time to check in yet")
+                time.sleep(2)
                 continue
 
-            # Todo: Clear from heap afterwards
-            self.southwest_api.post_info_to_southwest()
+            reservation = self.reservation_manager.get_first_reservation()
+            self.southwest_api.check_in_flight(reservation)
+            self.reservation_manager.delete_reservation(reservation)
 
     def _log0(self, x):
         print(x)
@@ -153,19 +168,19 @@ class ReservationSystem:
         """
         check_in_time = self.southwest_api.get_flight_time(reservation_number) - (24 * 60 * 60) # Subtract 24 hours in seconds, defaults to 0
         reservation = ReservationInfo(first_name, last_name, reservation_number, check_in_time)
-        return self.scheduler.add_reservation(reservation)
+        return self.reservation_manager.add_reservation(reservation)
             
     def delete_reservation(self, reservation_number : str):
-        return self.scheduler.delete_reservation(reservation_number)
+        return self.reservation_manager.delete_reservation(reservation_number)
 
     def get_first_reservation(self):
-        return self.scheduler.get_first_reservation()
+        return self.reservation_manager.get_first_reservation()
 
     def get_number_of_reservations(self):
-        return self.scheduler.get_number_of_reservations()
+        return self.reservation_manager.get_number_of_reservations()
 
     def printReservationsByName(self):
-        for i in self.scheduler.reservation_heap:
+        for i in self.reservation_manager.reservation_heap:
             print(i.first_name)
 
 def main():

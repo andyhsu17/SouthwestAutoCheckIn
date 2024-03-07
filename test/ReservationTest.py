@@ -1,21 +1,28 @@
+import argparse
 import sys
 sys.path.append('src')
 from ReservationSystem import *
 import unittest
-from unittest.mock import MagicMock, Mock
+from unittest.mock import MagicMock, Mock, patch
 
+
+verbosity = 0
 
 class ReservationSystemProxy(ReservationSystem):
     """ Reservation System inherited class
     """
+    def __init__(self, verbosity):
+        super(ReservationSystemProxy, self).__init__(verbosity)
+
     def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, check_in_time):
-        SouthwestApi.get_flight_time=MagicMock(return_value=check_in_time + (24 * 60 * 60))
+        self.southwest_api.get_flight_time=MagicMock(return_value=check_in_time + (24 * 60 * 60))
         self.add_reservation(first_name, last_name, reservation_number)
 
 class ReservationSystemTest(unittest.TestCase):
     def setUp(self):
+        global verbosity
         # Scheduler._create_sleep_thread_epoch=MagicMock(return_value=None)
-        self.system = ReservationSystemProxy()
+        self.system = ReservationSystemProxy(verbosity)
 
     def tearDown(self):
         self.system.__del__()
@@ -25,8 +32,8 @@ class ReservationSystemTest(unittest.TestCase):
         self.system.add_reservation("Andy", "Hsu", "KNJ653")
         self.assertEqual(self.system.get_first_reservation().first_name, "Andy")
 
-    def test_create_reservation_scheduler(self):
-        self.assertNotEqual(self.system.scheduler, None)
+    def test_create_reservation_manager(self):
+        self.assertNotEqual(self.system.reservation_manager, None)
 
     def test_create_reservation_duplicate(self):
         self.system.add_reservation("Andy", "Hsu", "KNJ653")
@@ -100,4 +107,6 @@ class ReservationSystemTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    if (len(sys.argv) > 1):
+        verbosity = 2
     unittest.main()
