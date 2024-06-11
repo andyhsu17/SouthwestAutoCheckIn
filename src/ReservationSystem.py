@@ -35,7 +35,6 @@ class SouthwestApi():
         """
         # Todo
         return 0
-        pass
 
     def check_in_flight(self, reservation : ReservationInfo):
         self._post_info_to_southwest(reservation.first_name, reservation.last_name, reservation.reservation_number)
@@ -71,7 +70,6 @@ class ReservationManager:
             reservation (ReservationInfo): Reservation to add
         """
         if reservation.reservation_number in self.reservation_numbers:
-            # print(f"Unable to add reservation number {reservation.reservation_number} since it already exists")
             return ErrorCode.RESERVATION_EXISTS
         self.reservation_numbers.add(reservation.reservation_number)
         heapq.heappush(self.reservation_heap, reservation)
@@ -96,7 +94,12 @@ class ReservationManager:
                 heapq.heapify(self.reservation_heap)
                 # don't forget to remove it from our set
                 self.reservation_numbers.remove(reservation_number)
-        return ErrorCode.SUCCESS
+                print(f"Successfully removed reservation: {reservation_number} from system")
+                return ErrorCode.SUCCESS
+
+        # Should never get here
+        return ErrorCode.UNKNOWN_RESERVATION
+        
 
     def get_first_reservation(self):
         """Gets the first reservation to be checked in for
@@ -122,6 +125,7 @@ class ReservationSystem:
         self.run_thread = True
         self.check_in_thread.start()
         self.polling_time_seconds = 2 # Period to see if its time to check in yet
+        self.ONE_DAY_IN_SECONDS = 24 * 60 * 60
 
     def __del__(self):
         self.run_thread = False
@@ -129,23 +133,26 @@ class ReservationSystem:
         # Waits until sleeping thread finishes before continuing
         self.check_in_thread.join()
 
+    def _get_current_time(self) -> int:
+        return time.time()
+
     def _check_in_flight(self):
         while self.run_thread is True:
+            time.sleep(1)
+            self._log2(f"running thread with reservations: {self.reservation_manager.get_number_of_reservations()}")
             if self.reservation_manager.get_number_of_reservations() == 0:
                 self._log2("Thread could not find any reservations in queue, sleeping")
-                time.sleep(2)
                 continue
 
-            if time.time() < self.reservation_manager.get_first_reservation().get_check_in_time():
+            if self._get_current_time() < self.reservation_manager.get_first_reservation().get_check_in_time():
                 reservation = self.reservation_manager.get_first_reservation()
                 self._log2(f"Thread found reservation for {reservation.first_name} {reservation.last_name}, but is not\
                            time to check in yet")
-                time.sleep(2)
                 continue
 
             reservation = self.reservation_manager.get_first_reservation()
             self.southwest_api.check_in_flight(reservation)
-            self.reservation_manager.delete_reservation(reservation)
+            self.reservation_manager.delete_reservation(reservation.reservation_number)
 
     def _log0(self, x):
         print(x)
@@ -166,7 +173,8 @@ class ReservationSystem:
             last_name (str): Last name
             reservation_number (str): Southwest confirmation code
         """
-        check_in_time = self.southwest_api.get_flight_time(reservation_number) - (24 * 60 * 60) # Subtract 24 hours in seconds, defaults to 0
+        # Subtract 24 hours in seconds, defaults to 0 in test
+        check_in_time = self.southwest_api.get_flight_time(reservation_number) - self.ONE_DAY_IN_SECONDS
         reservation = ReservationInfo(first_name, last_name, reservation_number, check_in_time)
         return self.reservation_manager.add_reservation(reservation)
             

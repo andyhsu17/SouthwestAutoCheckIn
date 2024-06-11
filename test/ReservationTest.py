@@ -1,5 +1,5 @@
-import argparse
 import sys
+import time
 sys.path.append('src')
 from ReservationSystem import *
 import unittest
@@ -13,10 +13,17 @@ class ReservationSystemProxy(ReservationSystem):
     """
     def __init__(self, verbosity):
         super(ReservationSystemProxy, self).__init__(verbosity)
+        self.current_time = 0
 
-    def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, check_in_time):
-        self.southwest_api.get_flight_time=MagicMock(return_value=check_in_time + (24 * 60 * 60))
+    def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, seconds_until_checkin):
+        # Since the reservation system will always take the real flight time and subtract 24 hours from it, this is a hack
+        # to add 24 hours to the time returned from get_flight_time(), which will ensure that we check in N seconds from this call
+        self.southwest_api.get_flight_time=MagicMock(return_value=seconds_until_checkin + self.ONE_DAY_IN_SECONDS)
         self.add_reservation(first_name, last_name, reservation_number)
+
+    def _get_current_time(self) -> int:
+        self.current_time = self.current_time + 1
+        return self.current_time
 
 class ReservationSystemTest(unittest.TestCase):
     def setUp(self):
@@ -104,7 +111,13 @@ class ReservationSystemTest(unittest.TestCase):
         self.assertEqual(self.system.get_first_reservation().first_name, "Ken")
         self.assertEqual(self.system.get_first_reservation().check_in_time, 0)
 
-
+    def test_check_time_expires(self):
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
+        self.system.create_reservation_force_check_in_time("Danny", "Tran", "LNJ653", 2)
+        self.assertEqual(self.system.get_first_reservation().first_name, "Danny")
+        self.assertEqual(self.system.get_number_of_reservations(), 1)
+        time.sleep(3)
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
 
 if __name__ == '__main__':
     if (len(sys.argv) > 1):
