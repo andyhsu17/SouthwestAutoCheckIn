@@ -3,7 +3,7 @@ import time
 sys.path.append('src')
 from ReservationSystem import *
 import unittest
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock
 
 
 verbosity = 0
