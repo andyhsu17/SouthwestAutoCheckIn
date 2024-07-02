@@ -1,0 +1,369 @@
+      {
+        "pageref": "page_0",
+        "startedDateTime": "2024-06-27T15:42:05.993Z",
+        "time": 697.0175810856745,
+        "request": {
+          "method": "POST",
+          "url": "https://www.southwest.com/api/air-checkin/v1/air-checkin/page/air/check-in/review",
+          "httpVersion": "HTTP/2",
+          "cookies": [
+            {
+              "name": "ADRUM",
+              "value": "s=1719502925154&r=https%3A%2F%2Fwww.southwest.com%2F%3Fhash%3D-1577087104"
+            },
+            {
+              "name": "RT",
+              "value": "\"z=1&dm=southwest.com&si=d0d23104-3ac7-4ab5-9905-fae5974c0c48&ss=lxxe7j5r&sl=w&tt=1fmn&bcn=%2F%2F17de4c10.akstat.io%2F&ld=1fdno&ul=1fp8z&hd=1fpdw\""
+            },
+            {
+              "name": "gpv_Page",
+              "value": "HP%3ASWA%3ASouthwest%20Homepage"
+            },
+            {
+              "name": "mbox",
+              "value": "PC#373e3386d1694bd3baa4c06041f79f3e.34_0#1782747708|session#a5e22de843774b3a8f99521d1bf9eb7e#1719504786"
+            },
+            {
+              "name": "sRpK8nqm_sc",
+              "value": "A_PbgGKJAQAAdWWBeW1pLODGf36KsLpOfFCfe3xvjkIsJ39bN_dzn07UBSRfAa5D03D6K21wNeQAAOfvAAAAAA|1|0|7c6839dcdd5359401b5018e7a64bb013d07091c3"
+            },
+            {
+              "name": "s_sq",
+              "value": "swaprod%3D%2526c.%2526a.%2526activitymap.%2526page%253DHP%25253ASWA%25253ASouthwest%252520Homepage%2526link%253DCheck%252520in%2526region%253DTabbedArea_4-panel-4%2526pageIDType%253D1%2526.activitymap%2526.a%2526.c"
+            },
+            {
+              "name": "akavpau_prd_air_check_in",
+              "value": "1719503525~id=3240b17f6ee6bdcca465b549ae66d7fc"
+            },
+            {
+              "name": "X-AK-PIM-INJECT",
+              "value": "sync"
+            },
+            {
+              "name": "_imp_apg_r_",
+              "value": "%7B%22_rt%22%3A%22DTA2Z71TshLd8Cmqlge%2BgMdSDKue62Gg2lU9lQfrxcE%3D%22%7D"
+            },
+            {
+              "name": "sRpK_XA_swc",
+              "value": "%7B%22c%22%3A%22ZHlBckJxS3JIRGVBR2hCZw%3D%3D2VOQC2feZNlDz4O1up_XHPhgNLYgbNCMD19iamsyc6tYr-jOCyAVtwvl4B-tCcRhlgXlFI5tZN4nmiWwdf_-oF9kPwgAkc5TncKnvr3L_Hqnw8yejjx4oHbBRmc0VjZBETCoFQKqZ7Jx%22%2C%22dc%22%3A%22102%22%2C%22mf%22%3A0%7D"
+            },
+            {
+              "name": "s_cc",
+              "value": "true"
+            },
+            {
+              "name": "_mibhv",
+              "value": "anon-1718161763275-9021475535_4971"
+            },
+            {
+              "name": "at_check",
+              "value": "true"
+            },
+            {
+              "name": "akavpau_prd_non_vision",
+              "value": "1719503507~id=2c5f285cffa41da4d324abf0811b4134"
+            },
+            {
+              "name": "_cc-x",
+              "value": "ZDI2MGNiYTctMDgxYy00YjliLWE1Y2QtMjNkZDQ1YWUzZTVjOjE3MTk1MDI5MDY0ODQ"
+            },
+            {
+              "name": "SwaRegionCookie",
+              "value": "pdc"
+            },
+            {
+              "name": "SwaSessionCookie",
+              "value": "B66E23B0225242F8B4D43FE9C71C1A6C"
+            },
+            {
+              "name": "AccountBarCookie",
+              "value": "136047110112112124130123129091110122114047071123130121121057047112121110128128047071047112124122059128132110112124127125059112124122122124123059078112112124130123129079110127080124124120118114099110121130114128047057047112124122125110123134086113047071123130121121057047112129122083118127128129091110122114047071123130121121057047114133125118127114128047071123130121121057047121110128129078112129118131118129134047071123130121121057047121124116118123082127127124127047071123130121121057047121124116118123082127127124127080124113114047071123130121121057047121124134110121129134047071115110121128114057047125124118123129128047071123130121121057047127127078112112124130123129091130122111114127047071123130121121057047129118114127047071123130121121057047129118114127080124113114047071123130121121057047130128114127083130121121091110122114047071123130121121057047133113118116114128129047071123130121121057047133118125110113113127047071047067070059063064061059062066063059062065065057045063064059063061063059062062064059068057045063064059063063062059063064059063061063057045063064059065068059066070059062061066057045063064059063063062059063064059063062067057045062061059062064069059062070065059067066057045062061059062064061059067065059070061047057047133129118122114124130129047071047061067060063068060063061063066045062066071062063071062065047138"
+            },
+            {
+              "name": "s_wr",
+              "value": "1b6983f3-4e9d-4ecd-b95f-7de856b7aabe"
+            },
+            {
+              "name": "QSI_HistorySession",
+              "value": "https%3A%2F%2Fwww.southwest.com%2Fair%2Fcheck-in%2Findex.html%3Fclk%3DHOME-BOOKING-WIDGET-AIR-CHANGE%26confirmationNumber%3DAJEU09%26formType%3DCHANGE%26passengerFirstName%3DAndrew%26passengerLastName%3DHsu%26validate%3Dtrue~1719500569261"
+            },
+            {
+              "name": "AMCV_65D316D751E563EC0A490D4C%40AdobeOrg",
+              "value": "179643557%7CMCIDTS%7C19902%7CMCMID%7C72046205447152787300517496382383685665%7CMCAID%7CNONE%7CMCOPTOUT-1719507713s%7CNONE%7CMCAAMLH-1720105313%7C9%7CMCAAMB-1720105313%7Cj8Odv6LonN4r3an7LhD3WZrU1bUpAkFkkiY1ncBR96t2PTI%7CvVersion%7C5.5.0"
+            },
+            {
+              "name": "_cc",
+              "value": "AUWSo7RuGmolD9KwFCMoUC3C"
+            },
+            {
+              "name": "_cid_cc",
+              "value": "AUWSo7RuGmolD9KwFCMoUC3C"
+            },
+            {
+              "name": "valid_promo",
+              "value": "false"
+            },
+            {
+              "name": "akavpau_prd_air_booking",
+              "value": "1719293183~id=f87b16c9a11162494dad10b05c8a0832"
+            },
+            {
+              "name": "_up",
+              "value": "1.2.72111836.1718161786"
+            },
+            {
+              "name": "nmstat",
+              "value": "d51d7ed9-ad03-b9d3-b919-f249648edbf3"
+            },
+            {
+              "name": "AMCVS_65D316D751E563EC0A490D4C%40AdobeOrg",
+              "value": "1"
+            },
+            {
+              "name": "PIM-SESSION-ID",
+              "value": "vrvHGXtlqC9Uk2lD"
+            },
+            {
+              "name": "swa_FPID",
+              "value": "07d742b7-ca46-49e2-9b6c-a6951d325a77"
+            }
+          ],
+          "headers": [
+            {
+              "name": "Sec-Fetch-Mode",
+              "value": "cors"
+            },
+            {
+              "name": "Referer",
+              "value": "https://www.southwest.com/air/check-in/review.html?confirmationNumber=HSUMAN&formType=CHANGE&passengerFirstName=Andy&passengerLastName=Hsu&clk=HOME-BOOKING-WIDGET-AIR-CHANGE"
+            },
+            {
+              "name": "Cookie",
+              "value": "ADRUM=s=1719502925154&r=https%3A%2F%2Fwww.southwest.com%2F%3Fhash%3D-1577087104; RT=\"z=1&dm=southwest.com&si=d0d23104-3ac7-4ab5-9905-fae5974c0c48&ss=lxxe7j5r&sl=w&tt=1fmn&bcn=%2F%2F17de4c10.akstat.io%2F&ld=1fdno&ul=1fp8z&hd=1fpdw\"; gpv_Page=HP%3ASWA%3ASouthwest%20Homepage; mbox=PC#373e3386d1694bd3baa4c06041f79f3e.34_0#1782747708|session#a5e22de843774b3a8f99521d1bf9eb7e#1719504786; sRpK8nqm_sc=A_PbgGKJAQAAdWWBeW1pLODGf36KsLpOfFCfe3xvjkIsJ39bN_dzn07UBSRfAa5D03D6K21wNeQAAOfvAAAAAA|1|0|7c6839dcdd5359401b5018e7a64bb013d07091c3; s_sq=swaprod%3D%2526c.%2526a.%2526activitymap.%2526page%253DHP%25253ASWA%25253ASouthwest%252520Homepage%2526link%253DCheck%252520in%2526region%253DTabbedArea_4-panel-4%2526pageIDType%253D1%2526.activitymap%2526.a%2526.c; akavpau_prd_air_check_in=1719503525~id=3240b17f6ee6bdcca465b549ae66d7fc; X-AK-PIM-INJECT=sync; _imp_apg_r_=%7B%22_rt%22%3A%22DTA2Z71TshLd8Cmqlge%2BgMdSDKue62Gg2lU9lQfrxcE%3D%22%7D; sRpK_XA_swc=%7B%22c%22%3A%22ZHlBckJxS3JIRGVBR2hCZw%3D%3D2VOQC2feZNlDz4O1up_XHPhgNLYgbNCMD19iamsyc6tYr-jOCyAVtwvl4B-tCcRhlgXlFI5tZN4nmiWwdf_-oF9kPwgAkc5TncKnvr3L_Hqnw8yejjx4oHbBRmc0VjZBETCoFQKqZ7Jx%22%2C%22dc%22%3A%22102%22%2C%22mf%22%3A0%7D; s_cc=true; _mibhv=anon-1718161763275-9021475535_4971; at_check=true; akavpau_prd_non_vision=1719503507~id=2c5f285cffa41da4d324abf0811b4134; _cc-x=ZDI2MGNiYTctMDgxYy00YjliLWE1Y2QtMjNkZDQ1YWUzZTVjOjE3MTk1MDI5MDY0ODQ; SwaRegionCookie=pdc; SwaSessionCookie=B66E23B0225242F8B4D43FE9C71C1A6C; AccountBarCookie=136047110112112124130123129091110122114047071123130121121057047112121110128128047071047112124122059128132110112124127125059112124122122124123059078112112124130123129079110127080124124120118114099110121130114128047057047112124122125110123134086113047071123130121121057047112129122083118127128129091110122114047071123130121121057047114133125118127114128047071123130121121057047121110128129078112129118131118129134047071123130121121057047121124116118123082127127124127047071123130121121057047121124116118123082127127124127080124113114047071123130121121057047121124134110121129134047071115110121128114057047125124118123129128047071123130121121057047127127078112112124130123129091130122111114127047071123130121121057047129118114127047071123130121121057047129118114127080124113114047071123130121121057047130128114127083130121121091110122114047071123130121121057047133113118116114128129047071123130121121057047133118125110113113127047071047067070059063064061059062066063059062065065057045063064059063061063059062062064059068057045063064059063063062059063064059063061063057045063064059065068059066070059062061066057045063064059063063062059063064059063062067057045062061059062064069059062070065059067066057045062061059062064061059067065059070061047057047133129118122114124130129047071047061067060063068060063061063066045062066071062063071062065047138; s_wr=1b6983f3-4e9d-4ecd-b95f-7de856b7aabe; QSI_HistorySession=https%3A%2F%2Fwww.southwest.com%2Fair%2Fcheck-in%2Findex.html%3Fclk%3DHOME-BOOKING-WIDGET-AIR-CHANGE%26confirmationNumber%3DAJEU09%26formType%3DCHANGE%26passengerFirstName%3DAndrew%26passengerLastName%3DHsu%26validate%3Dtrue~1719500569261; AMCV_65D316D751E563EC0A490D4C%40AdobeOrg=179643557%7CMCIDTS%7C19902%7CMCMID%7C72046205447152787300517496382383685665%7CMCAID%7CNONE%7CMCOPTOUT-1719507713s%7CNONE%7CMCAAMLH-1720105313%7C9%7CMCAAMB-1720105313%7Cj8Odv6LonN4r3an7LhD3WZrU1bUpAkFkkiY1ncBR96t2PTI%7CvVersion%7C5.5.0; _cc=AUWSo7RuGmolD9KwFCMoUC3C; _cid_cc=AUWSo7RuGmolD9KwFCMoUC3C; valid_promo=false; akavpau_prd_air_booking=1719293183~id=f87b16c9a11162494dad10b05c8a0832; _up=1.2.72111836.1718161786; nmstat=d51d7ed9-ad03-b9d3-b919-f249648edbf3; AMCVS_65D316D751E563EC0A490D4C%40AdobeOrg=1; PIM-SESSION-ID=vrvHGXtlqC9Uk2lD; swa_FPID=07d742b7-ca46-49e2-9b6c-a6951d325a77"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+            },
+            {
+              "name": "Host",
+              "value": "www.southwest.com"
+            },
+            {
+              "name": "Origin",
+              "value": "https://www.southwest.com"
+            },
+            {
+              "name": "Sec-Fetch-Dest",
+              "value": "empty"
+            },
+            {
+              "name": "Sec-Fetch-Site",
+              "value": "same-origin"
+            },
+            {
+              "name": "Content-Length",
+              "value": "192"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json, text/javascript, */*; q=0.01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "EE30zvQLWf-d",
+              "value": "ADaAhIDBCKGBgQGAAYIQgISigaIAwBGAzPpCxg_33ocx3sD_CABOHb58yUo_1______6FJsyA_9RndTxz83olldkOfr33J0"
+            },
+            {
+              "name": "X-App-ID",
+              "value": "air-check-in"
+            },
+            {
+              "name": "EE30zvQLWf-c",
+              "value": "AICEWlqQAQAAT_-8-Gzxc1v38dpEEHeP1jfzPwKkdk9d9dUMgk4dvnzJSj_X"
+            },
+            {
+              "name": "EE30zvQLWf-b",
+              "value": "tn4ua9"
+            },
+            {
+              "name": "EE30zvQLWf-a",
+              "value": "3EemHMJ8wc0VKzERfBkboyuaI=Z0f1oP3_IGxAEU0Yu8hrne_zkLi9M0W0HxN0JL3eG3vQyDzhPziPkzgNUtYfK70SEYbjiGFLkr-k4IlWin=jA2wqcPfDaIezED1F1e5BOuAhj3MHLqksFFI0vnrgwLZDecpN3Enww5Htpw2NsyXFVtjXsUYw7ivwFLZL3KvjPbipS79qirZ79dW55r9ROxBcXkFZyCntL49uwNELTunuPoS4Mxg-UUlFYIA49aXtuK4iRmDGIVjGdA0X70LN5_XKArOd7sTAfRM2UZ3SlJJJW-JiKsDUEkgbeg4gQBxSqfbGMG9dRfsF1ONYipYjYYEaZbGbFx5X40lQfbDe9kcfyNtMZw0HBUeNzAPkJQTM8bGx1fgnd=z=Y9egGzH8jQsSBc0yySEDhwbzcrfp5OrBTdH8xI=nX_n=r3DFYaJeHHgl1xPZORsLDahWITwz0sxMz=iT0EI=Ry5Q2Px4Z_t95GV_T3F_dnvQBJTkkSkscfHs1cEasUMYeSchBzrvjIIt8xI5zsJU=AjzpbFglgksu1rDBKAWn_8zgnhqGxmfSyc_VWYUNcsvQw4gcWn32gVAkDTB7n2x0VfeCNUbOMpWfvp8p_WrRT17MrRZf5CbTGYnKM5=sRPvZvrHEc=NP8D_1p1vsePLtiGkOJ2KnQzwAzbsQ=7IneoaZXCi5KZhoObFpiSpKdo0kp2yNE1x-IfDVoF9c3wS_7MvW1jDekH-3rbb=RKMeIKEI59HnpZbEN-Rhrbx3ClCKC=k3cpPrgJ1W7Bf9CEM-E9zitMDDNrKFkSdMNBpMGgdsihGYkn5dPqyYxt5de_BaoCh34p2-iVXKoCSB_wH=D9PbWjrMMyEr70GbrfR5=p3q82Y5o4qm7W1mewP9CErmoRmqUj2K9=rxsow0qjHnRkCzUBsU7CDHDWq2toXFO2bSTA21feuQRWZyqrls4lyYtrWxV8W3EaoDWQ_OWIu4l3IVohXN1lOyQJwBEaHi9pzOlbEghtCOTL2QFYPNEwVRYq2CPP4DSjka3aAdpyQAVhAbvbcumHdEa=y-XS_k5DZzEh9zBMXAfsBofaqJzcCp=_pEdinwCfOF9iK-MStnOBhMNt2_EQVynWmqh9DAJKk2mDuhRAg71eqcxLksZ0SPveR_klIp5Tg12UBA8ShPMSSD84fZmSNPh1waxPZZkOUO=xzqSdBOYjBEpyE29bdYG34n2rHbidwdAh0l_=BIwTloBwnqotb8pAotSJwl_OlKEgWY5phvusfC9n9DIMWgNYOatK9Ws-Os4PY0I0=JVtYWsd9DZVki5dDDEBg18FOiKe7iUDYy3rBcDJeY-M4OvP9kXvTp-tpN5ov99BaKozUDRdKa0Bem4i8mAfDKYtnTWRyoQ8urtdLQ=cLUGzCDTCS_uMPHNYTd7tN93Dtr1sInJTXOzzmG_icCvaHGiXPwo4ZuH4gM=8k82wUytovXgC5BFKLt0SYAUnlxxJ1bibVyLrgEeVgKw8g9BL-mczaMf7RRe2xRV_xC9ORjOWfBb5iRgfCKeNVB0juADXGKNnRK0R7W7yTDPMPn15oqYICG3U9eco3=j9KyN0YqFE_uK5RxVnU95HKEfeOOUrSJwuRCjY3xYB-xHG8P1STGZyCerHTGlew4rh2l81pRCVN-9cQ05NPB4IjhskVqmNEBxzBmE_1AVTccAfuUvi5XGK-H7XqL9oqXetEZfFu5uL1EI9-3HZyxsmnRpLuPeqq85LzA1mcJ9OtJH2vqHRd1_7hB8A3BovfOb445Q7UJxyydLGDoTu9P1fy-hJ1kaqMsBZyb1S9VVxkro9X7mO4n4QLODH21Ez0AsVNWogV5FHmat2jPeNO=o8ZP4b9sejP1NyWYEQ5TRjl"
+            },
+            {
+              "name": "EE30zvQLWf-z",
+              "value": "q"
+            },
+            {
+              "name": "X-Channel-ID",
+              "value": "southwest"
+            },
+            {
+              "name": "ADRUM",
+              "value": "isAjax:true"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "l7xx944d175ea25f4b9c903a583ea82a1c4c"
+            },
+            {
+              "name": "EE30zvQLWf-f",
+              "value": "A6JuXFqQAQAAOT7MNwELmlT10EphvPb1zF74kgrbgUfDlO1opZ1kxlTBLVdDAUXmmJD6KwsENeReCOfvosJeCA=="
+            },
+            {
+              "name": "X-User-Experience-ID",
+              "value": "c8df4ad9-60f4-42e4-861f-0607ce9252bb"
+            }
+          ],
+          "queryString": [],
+          "headersSize": 4991,
+          "bodySize": 192,
+          "postData": {
+            "mimeType": "application/json",
+            "text": "{\"clk\":\"HOME-BOOKING-WIDGET-AIR-CHANGE\",\"confirmationNumber\":\"HSUMAN\",\"formType\":\"CHANGE\",\"passengerFirstName\":\"Andy\",\"passengerLastName\":\"Hsu\",\"application\":\"air-check-in\",\"site\":\"southwest\"}",
+            "params": []
+          }
+        },
+        "response": {
+          "status": 404,
+          "statusText": "",
+          "httpVersion": "HTTP/2",
+          "cookies": [
+            {
+              "name": "sRpK8nqm_sc",
+              "value": "A_PbgGKJAQAAdWWBeW1pLODGf36KsLpOfFCfe3xvjkIsJ39bN_dzn07UBSRfAa5D03D6K21wNeQAAOfvAAAAAA|1|1|d0f9efc4ab8f9e3b9a537f792c5360dab30f47f5",
+              "path": "/",
+              "domain": "southwest.com",
+              "expires": "",
+              "httpOnly": false,
+              "secure": true
+            }
+          ],
+          "headers": [
+            {
+              "name": "Set-Cookie",
+              "value": "sRpK8nqm_sc=A_PbgGKJAQAAdWWBeW1pLODGf36KsLpOfFCfe3xvjkIsJ39bN_dzn07UBSRfAa5D03D6K21wNeQAAOfvAAAAAA|1|1|d0f9efc4ab8f9e3b9a537f792c5360dab30f47f5; Path=/; Max-Age=1577847600; Domain=southwest.com; Secure"
+            },
+            {
+              "name": "Access-Control-Allow-Methods",
+              "value": "GET, POST, PUT, DELETE, OPTIONS, HEAD"
+            },
+            {
+              "name": "Content-Security-Policy",
+              "value": "frame-ancestors 'self';"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "max-age=0, no-cache, no-store"
+            },
+            {
+              "name": "Access-Control-Allow-Origin",
+              "value": "https://www.southwest.com"
+            },
+            {
+              "name": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "name": "Access-Control-Allow-Headers",
+              "value": "origin, content-type, accept, authorization, token, User-Agent, X-Forwarded-For, X-User-Experience-ID, X-Request-ID, X-API-Key, X-Account-Number, X-Swa-Region, X-Channel-Id, X-Api-IDToken, true-host"
+            },
+            {
+              "name": "Content-Length",
+              "value": "387"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 27 Jun 2024 15:42:06 GMT"
+            },
+            {
+              "name": "Expires",
+              "value": "Thu, 27 Jun 2024 15:42:06 GMT"
+            },
+            {
+              "name": "Access-Control-Expose-Headers",
+              "value": "X-User-Experience-ID, X-Request-ID"
+            },
+            {
+              "name": "Access-Control-Max-Age",
+              "value": "1"
+            },
+            {
+              "name": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=UTF-8"
+            },
+            {
+              "name": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "name": "Strict-Transport-Security",
+              "value": "max-age=31536000"
+            },
+            {
+              "name": "terms-of-service",
+              "value": "Unauthorized access, display, or use of Southwest's Company Information, including fare data, is prohibited by the Terms & Conditions on Southwest.com and Swabiz.com."
+            },
+            {
+              "name": "x-ssd",
+              "value": "1"
+            },
+            {
+              "name": "x-channel-id",
+              "value": "southwest"
+            },
+            {
+              "name": "x-request-id",
+              "value": "0.cb17dd17.1719502926.3223b6c"
+            },
+            {
+              "name": "x-user-experience-id",
+              "value": "c8df4ad9-60f4-42e4-861f-0607ce9252bb"
+            }
+          ],
+          "content": {
+            "size": 387,
+            "compression": -9,
+            "mimeType": "application/json",
+            "text": "{\"data\":null,\"success\":false,\"notifications\":{\"formErrors\":[{\"severity\":\"ERROR\",\"code\":\"ERROR__RESERVATION_NOT_FOUND\",\"target\":\"\",\"trackingCode\":\"404611301\",\"infoList\":[],\"formError\":true,\"infoSize\":0}],\"fieldErrors\":null,\"messages\":null,\"empty\":false},\"uiMetadata\":{\"proxyLogout\":true,\"upgradedBoardingEnabled\":true,\"chapiVersion\":\"1.63.001-1\",\"maintenance\":false,\"group-checkin\":true}}"
+          },
+          "redirectURL": "",
+          "headersSize": 953,
+          "bodySize": 396,
+          "_transferSize": 1349
+        },
+        "cache": {},
+        "timings": {
+          "blocked": 1.8748508300632238,
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 694.7458207141608,
+          "receive": 0.3969095414504409
+        },
+        "serverIPAddress": "23.204.249.229",
+        "_serverPort": 443,
+        "connection": "80",
+        "_fetchType": "Network Load",
+        "_priority": "medium"
+      },

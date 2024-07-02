@@ -1,6 +1,7 @@
 import heapq
 
 from ReservationInfo import ReservationInfo
+from Logger import Logger
 from enum import Enum
 
 
@@ -15,9 +16,10 @@ class ErrorCode(Enum):
 class ReservationManager:
     """Class to create, monitor, and handle all reservations to be made
     """
-    def __init__(self):
+    def __init__(self, debug_level):
         self.reservation_heap = []
         self.reservation_numbers = set()
+        self.logger = Logger(debug_level)
 
     def add_reservation(self, reservation : ReservationInfo):
         """Adds a reservation to the system
@@ -50,7 +52,7 @@ class ReservationManager:
                 heapq.heapify(self.reservation_heap)
                 # don't forget to remove it from our set
                 self.reservation_numbers.remove(reservation_number)
-                print(f"Successfully removed reservation: {reservation_number} from system")
+                self.logger._log2(f"Successfully removed reservation: {reservation_number} from system")
                 return ErrorCode.SUCCESS
 
         # Should never get here

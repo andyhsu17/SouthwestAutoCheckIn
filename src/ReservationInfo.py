@@ -10,12 +10,6 @@ class ReservationInfo:
     def __lt__(self, other):
         return self.check_in_time < other.check_in_time
     
-    # def _get_flight_time_from_southwest(self, reservation_number):
-    #     """Gets the flight time for this reservation from southwest website in epoch time
-    #     """
-    #     # Todo
-    #     return 24 * 60 * 60
-
     def get_check_in_time(self):
         """Returns the check in time for this reservation
         """

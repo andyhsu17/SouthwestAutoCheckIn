@@ -1,12 +1,29 @@
+import argparse
 import sys
 import time
-sys.path.append('src')
-from ReservationSystem import *
 import unittest
 from unittest.mock import MagicMock
 
+sys.path.append('src')
+from ReservationSystem import *
+from SouthwestApi import *
+
 
 verbosity = 0
+
+class SouthwestApiProxy(SouthwestApi):
+    def __init__(self, verbosity):
+        super(SouthwestApiProxy, self).__init__(verbosity)
+
+class SouthwestApiTest(unittest.TestCase):
+    def setUp(self):
+        global verbosity
+        self.api = SouthwestApiProxy(verbosity)
+
+    def test_check_in_unknown_reservation(self):
+        res = ReservationInfo('Andy', 'Hsu', 'HSUMAN', 0)
+        self.assertEqual(self.api.check_in_flight(res), HttpCode.RESERVATION_NOT_FOUND.value)
+
 
 class ReservationSystemProxy(ReservationSystem):
     """ Reservation System inherited class
@@ -19,6 +36,9 @@ class ReservationSystemProxy(ReservationSystem):
         # Since the reservation system will always take the real flight time and subtract 24 hours from it, this is a hack
         # to add 24 hours to the time returned from get_flight_time(), which will ensure that we check in N seconds from this call
         self.southwest_api.get_flight_time=MagicMock(return_value=seconds_until_checkin + self.ONE_DAY_IN_SECONDS)
+
+        # Fake southwest api to make sure it is always successful
+        self.southwest_api.check_in_flight=MagicMock(return_value=HttpCode.SUCCESS)
         self.add_reservation(first_name, last_name, reservation_number)
 
     def _get_current_time(self) -> int:
@@ -28,7 +48,6 @@ class ReservationSystemProxy(ReservationSystem):
 class ReservationSystemTest(unittest.TestCase):
     def setUp(self):
         global verbosity
-        # Scheduler._create_sleep_thread_epoch=MagicMock(return_value=None)
         self.system = ReservationSystemProxy(verbosity)
 
     def tearDown(self):
@@ -120,6 +139,12 @@ class ReservationSystemTest(unittest.TestCase):
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
 if __name__ == '__main__':
-    if (len(sys.argv) > 1):
-        verbosity = 2
+    valid_verbosity_levels = range(0, 3)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--verbosity', default=0)
+    parser.add_argument('unittest_args', nargs='*')
+    args = parser.parse_args()
+    verbosity = int(args.verbosity)
+
+    sys.argv[1:] = args.unittest_args
     unittest.main()
