@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import MagicMock
 
 sys.path.append('src')
-from ReservationSystem import *
+from CheckInSystem import *
 from SouthwestApi import *
 
 
@@ -25,11 +25,11 @@ class SouthwestApiTest(unittest.TestCase):
         self.assertEqual(self.api.check_in_flight(res), HttpCode.RESERVATION_NOT_FOUND.value)
 
 
-class ReservationSystemProxy(ReservationSystem):
+class CheckInSystemProxy(CheckInSystem):
     """ Reservation System inherited class
     """
     def __init__(self, verbosity):
-        super(ReservationSystemProxy, self).__init__(verbosity)
+        super(CheckInSystemProxy, self).__init__(verbosity)
         self.current_time = 0
 
     def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, seconds_until_checkin):
@@ -45,10 +45,10 @@ class ReservationSystemProxy(ReservationSystem):
         self.current_time = self.current_time + 1
         return self.current_time
 
-class ReservationSystemTest(unittest.TestCase):
+class CheckInSystemTest(unittest.TestCase):
     def setUp(self):
         global verbosity
-        self.system = ReservationSystemProxy(verbosity)
+        self.system = CheckInSystemProxy(verbosity)
 
     def tearDown(self):
         self.system.__del__()

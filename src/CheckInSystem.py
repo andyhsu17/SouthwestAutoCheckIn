@@ -8,7 +8,7 @@ from ReservationManager import *
 from SouthwestApi import *
 from Logger import Logger
 
-class ReservationSystem:
+class CheckInSystem:
     def __init__(self, debug_level=0):
         # The higher the debug level, the more info we will print
         self.THREAD_POLLING_RATE = 1 # seconds
@@ -81,7 +81,7 @@ class ReservationSystem:
             print(i.first_name)
 
 def main():
-    system = ReservationSystem()
+    system = CheckInSystem()
 
     # while True:
     #     pass
