@@ -10,8 +10,11 @@ from Logger import Logger
 
 class CheckInSystem:
     def __init__(self, debug_level=0):
-        # The higher the debug level, the more info we will print
-        self.THREAD_POLLING_RATE = 1 # seconds
+        """ Constructor
+
+        debug_level (int): O-2. The higher the debug level, the more verbose.
+        """
+        self.THREAD_POLLING_RATE_SECONDS = 1 # seconds
         self.reservation_manager = ReservationManager(debug_level)
         self.southwest_api = SouthwestApi(debug_level)
         self.check_in_thread = threading.Thread(target=self._check_in_flight)
@@ -36,8 +39,8 @@ class CheckInSystem:
 
     def _check_in_flight(self):
         while self.run_thread is True:
-            time.sleep(self.THREAD_POLLING_RATE)
-            self.logger._log2(f"running thread with reservations: {self.reservation_manager.get_number_of_reservations()}")
+            time.sleep(self.THREAD_POLLING_RATE_SECONDS)
+            self.logger._log2(f"running thread with {self.reservation_manager.get_number_of_reservations()} in queue")
             if self.reservation_manager.get_number_of_reservations() == 0:
                 self.logger._log2("Thread could not find any reservations in queue, sleeping")
                 continue
@@ -77,8 +80,8 @@ class CheckInSystem:
         return self.reservation_manager.get_number_of_reservations()
 
     def printReservationsByName(self):
-        for i in self.reservation_manager.reservation_heap:
-            print(i.first_name)
+        for res in self.reservation_manager.reservation_heap:
+            print(f"{res.first_name} {res.last_name}")
 
 def main():
     system = CheckInSystem()

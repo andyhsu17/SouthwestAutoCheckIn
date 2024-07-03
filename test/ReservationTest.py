@@ -7,9 +7,35 @@ from unittest.mock import MagicMock
 sys.path.append('src')
 from CheckInSystem import *
 from SouthwestApi import *
+from db import *
 
 
 verbosity = 0
+
+class DbProxy(db):
+    def __init__(self, db_name):
+        self.db_name = db_name
+        super(DbProxy, self).__init__(self.db_name)
+
+class DbTest(unittest.TestCase):
+    def setUp(self):
+        global verbosity
+        self.db = DbProxy('test_db')
+        self.db.create_table()
+
+    def tearDown(self):
+        self.db.delete_all()
+
+    def test_print_all(self):
+        self.db.print_all()
+
+    def test_add_to_db(self):
+        res = ReservationInfo('Andy', 'Hsu', 'HSUMAN', 0)
+        self.assertEqual(self.db.insert_data([res.get_tuple()]), True)
+        data = self.db.get_all()
+        self.assertEqual(len(data), 1)
+        # row 0, column 3 is reservation number
+        self.assertEqual(data[0][3], 'HSUMAN')
 
 class SouthwestApiProxy(SouthwestApi):
     def __init__(self, verbosity):

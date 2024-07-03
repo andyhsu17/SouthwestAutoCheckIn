@@ -14,3 +14,8 @@ class ReservationInfo:
         """Returns the check in time for this reservation
         """
         return self.check_in_time
+
+    def get_tuple(self):
+        """Returns the tuple data for this reservation
+        """
+        return (self.first_name, self.last_name, self.reservation_number, self.check_in_time)
