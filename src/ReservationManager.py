@@ -1,8 +1,9 @@
 import heapq
 
-from ReservationInfo import ReservationInfo
+from ReservationInfo import *
 from Logger import Logger
 from enum import Enum
+from db import db
 
 
 class ErrorCode(Enum):
@@ -16,10 +17,13 @@ class ErrorCode(Enum):
 class ReservationManager:
     """Class to create, monitor, and handle all reservations to be made
     """
-    def __init__(self, debug_level):
-        self.reservation_heap = []
+    def __init__(self, debug_level, db_name):
         self.reservation_numbers = set()
         self.logger = Logger(debug_level)
+        self.db = db(db_name)
+        self.reservation_heap = [TupleToReservationInfo(reservation_tuple[1:]) for reservation_tuple in self.db.get_all()]
+        for obj in self.reservation_heap:
+            self.logger._log2(obj.check_in_time, obj.reservation_number, obj.first_name, obj.last_name)
 
     def add_reservation(self, reservation : ReservationInfo):
         """Adds a reservation to the system
@@ -31,6 +35,7 @@ class ReservationManager:
             return ErrorCode.RESERVATION_EXISTS
         self.reservation_numbers.add(reservation.reservation_number)
         heapq.heappush(self.reservation_heap, reservation)
+        self.db.add_reservation(reservation)
 
         return ErrorCode.SUCCESS
 
@@ -52,6 +57,10 @@ class ReservationManager:
                 heapq.heapify(self.reservation_heap)
                 # don't forget to remove it from our set
                 self.reservation_numbers.remove(reservation_number)
+                try:
+                    self.db.delete_reservation(reservation_number)
+                except Exception as e:
+                    self.logger._log2(f"Did not find reservation {reservation_number} in database. Continuing.")
                 self.logger._log2(f"Successfully removed reservation: {reservation_number} from system")
                 return ErrorCode.SUCCESS
 

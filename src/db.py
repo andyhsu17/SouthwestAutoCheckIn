@@ -1,4 +1,5 @@
 import mysql.connector
+from ReservationInfo import *
 
 class db:
     def __init__(self, db_name):
@@ -8,23 +9,20 @@ class db:
         self.host = '127.0.0.1'  # or the server IP
         self.user = 'root'
 
-        # Establish a connection to the MySQL server
         self.connection = mysql.connector.connect(
             host=self.host,
             user=self.user,
         )
 
-        # Create a cursor object
         self.cursor = self.connection.cursor()
         self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS {self.db_name}")
-        # Select the database
         self.cursor.execute(f"USE {self.db_name}")
 
     def create_table(self):
 
-        # Create a new table users
+        # Create a new table named "flights"
         self.cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS flights (
             id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(255) NOT NULL,
             last_name VARCHAR(255) NOT NULL,
@@ -33,12 +31,19 @@ class db:
         )
         """)
 
+    def add_reservation(self, reservation : ReservationInfo):
+        print(f'Inserting {reservation.reservation_number} into db')
+        return self.insert_data([reservation.get_tuple()])
+
+    def add_reservation_list(self, reservation_list : list[ReservationInfo]):
+        return self.insert_data([reservation.get_tuple() for reservation in reservation_list])
+
     def insert_data(self, data):
         """ Function to insert data into the database
         data (list): list of tuples containing first name, last name, reservation num, check in time
         """
         insert_query = """
-        INSERT INTO users (first_name, last_name, reservation_number, check_in_time)
+        INSERT INTO flights (first_name, last_name, reservation_number, check_in_time)
         VALUES (%s, %s, %s, %s)
         """
         if not isinstance(data, list) or not all(isinstance(item, tuple) for item in data):
@@ -47,30 +52,33 @@ class db:
 
         self.cursor.executemany(insert_query, data)
 
-        # Commit the transaction
         self.connection.commit()
 
-        print("Data inserted into 'users' table")
+        print("Data inserted into 'flights' table")
         return True
 
     def delete_reservation(self, reservation_number):
-        pass
+        delete_query = f"""
+        DELETE FROM flights
+        WHERE reservation_number = '{reservation_number}';
+        """
+        self.cursor.execute(delete_query)
+
+        self.connection.commit()
+        print(f"reservation {reservation_number} deleted from table")
+
 
     def get_all(self):
-        # Query the data
-        select_query = "SELECT * FROM users"
+        select_query = "SELECT * FROM flights ORDER BY check_in_time"
         self.cursor.execute(select_query)
 
-        # Fetch all rows from the executed query
         rows = self.cursor.fetchall()
         return rows 
 
     def print_all(self):
-        # Query the data
-        select_query = "SELECT * FROM users"
+        select_query = "SELECT * FROM flights ORDER BY check_in_time"
         self.cursor.execute(select_query)
 
-        # Fetch all rows from the executed query
         rows = self.cursor.fetchall()
 
         for row in rows:

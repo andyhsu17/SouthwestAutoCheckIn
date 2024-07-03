@@ -1,3 +1,9 @@
+def TupleToReservationInfo(tuple_in : tuple):
+    if (len(tuple_in) != 4):
+        print("ERROR: tuple is incorrect length")
+    res = ReservationInfo(tuple_in[0], tuple_in[1], tuple_in[2], tuple_in[3])
+    return res
+
 class ReservationInfo:
     """Class that contains info needed per reservation
     """

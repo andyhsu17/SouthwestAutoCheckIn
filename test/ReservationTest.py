@@ -22,6 +22,7 @@ class DbTest(unittest.TestCase):
         global verbosity
         self.db = DbProxy('test_db')
         self.db.create_table()
+        self.db.delete_all()
 
     def tearDown(self):
         self.db.delete_all()
@@ -36,6 +37,46 @@ class DbTest(unittest.TestCase):
         self.assertEqual(len(data), 1)
         # row 0, column 3 is reservation number
         self.assertEqual(data[0][3], 'HSUMAN')
+
+    def test_add_multiple_to_db(self):
+        res = ReservationInfo('Andy', 'Hsu', 'HSUMAN', 0)
+        self.assertEqual(self.db.insert_data([res.get_tuple()]), True)
+        res.first_name = 'Danny'
+        res.reservation_number = 'NEWRES'
+        self.assertEqual(self.db.insert_data([res.get_tuple()]), True)
+        data = self.db.get_all()
+        self.assertEqual(len(data), 2)
+        # row 0, column 3 is reservation number
+        self.assertEqual(data[0][3], 'HSUMAN')
+        self.assertEqual(data[1][3], 'NEWRES')
+
+    def test_no_data(self):
+        data = self.db.get_all()
+        self.assertEqual(len(data), 0)
+
+    def test_delete(self):
+        res = ReservationInfo('Andy', 'Hsu', 'HSUMAN', 0)
+        self.assertEqual(self.db.insert_data([res.get_tuple()]), True)
+        res.first_name = 'Danny'
+        res.reservation_number = 'NEWRES'
+        self.assertEqual(self.db.insert_data([res.get_tuple()]), True)
+        data = self.db.get_all()
+        self.assertEqual(len(data), 2)
+        self.db.print_all()
+        self.db.delete_reservation('HSUMAN')
+        # self.assertEqual(len(data), 1)
+        data = self.db.get_all()
+        self.assertEqual(data[0][3], 'NEWRES')
+    
+    def test_load_persistence(self):
+        res = ReservationInfo('Andy', 'Hsu', 'HSUMAN', 0)
+        self.db.insert_data([res.get_tuple()])
+        res = ReservationInfo('Tim', 'Kang', 'TIMMAN', 1)
+        self.db.insert_data([res.get_tuple()])
+        new_db = DbProxy('test_db')
+        data = new_db.get_all()
+        self.assertEqual(data[0][3], 'HSUMAN')
+        self.assertEqual(data[1][3], 'TIMMAN')
 
 class SouthwestApiProxy(SouthwestApi):
     def __init__(self, verbosity):
@@ -54,8 +95,8 @@ class SouthwestApiTest(unittest.TestCase):
 class CheckInSystemProxy(CheckInSystem):
     """ Reservation System inherited class
     """
-    def __init__(self, verbosity):
-        super(CheckInSystemProxy, self).__init__(verbosity)
+    def __init__(self, verbosity, db_name):
+        super(CheckInSystemProxy, self).__init__(verbosity, db_name)
         self.current_time = 0
 
     def create_reservation_force_check_in_time(self, first_name, last_name, reservation_number, seconds_until_checkin):
@@ -74,10 +115,11 @@ class CheckInSystemProxy(CheckInSystem):
 class CheckInSystemTest(unittest.TestCase):
     def setUp(self):
         global verbosity
-        self.system = CheckInSystemProxy(verbosity)
+        self.system = CheckInSystemProxy(verbosity, 'test_db')
 
     def tearDown(self):
         self.system.__del__()
+        self.system.reservation_manager.db.delete_all()
 
     def test_get_first_reservation(self):
         self.assertEqual(self.system.get_first_reservation(), None)
@@ -164,6 +206,33 @@ class CheckInSystemTest(unittest.TestCase):
         time.sleep(3)
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
+    def test_add_to_db(self):
+        self.system.add_reservation("Andy", "Hsu", "KNJ653")
+        self.system.add_reservation("Matt", "Bilello", "BILELL")
+        self.assertEqual(self.system.get_number_of_reservations(), 2)
+        self.assertEqual(self.system.reservation_manager.db.get_all()[0][3], 'KNJ653')
+        self.assertEqual(self.system.reservation_manager.db.get_all()[1][3], 'BILELL')
+        self.system.delete_reservation("KNJ653")
+        self.assertEqual(self.system.get_number_of_reservations(), 1)
+        self.assertEqual(self.system.reservation_manager.db.get_all()[0][3], 'BILELL')
+    
+    def test_init_from_persistence(self):
+        # This test makes sure that when we init a database from persistence, it is sorted and
+        # put into the heap correctly
+        self.system.create_reservation_force_check_in_time("Danny", "Tran", "LNJ653", 1)
+        self.system.create_reservation_force_check_in_time("Andy", "Hsu", "LAJ653", 0)
+        self.system.create_reservation_force_check_in_time("Tim", "Blah", "AAAAB3", 9)
+        self.system.create_reservation_force_check_in_time("Jack", "Blah", "AAAAB4", 21)
+        self.system.create_reservation_force_check_in_time("rob", "Blah", "AAAAB5", 11)
+        newsystem = CheckInSystemProxy(verbosity, 'test_db')
+        data = newsystem.reservation_manager.db.get_all()
+        prev = -1
+        for i, obj in enumerate(data):
+            self.assertTrue(obj[4] > prev)
+            prev = obj[4]
+        # Since the new system has its own check in thread, we need to delete it to make
+        # sure the thread joins too
+        newsystem.__del__()
 if __name__ == '__main__':
     valid_verbosity_levels = range(0, 3)
     parser = argparse.ArgumentParser()

@@ -9,13 +9,13 @@ from SouthwestApi import *
 from Logger import Logger
 
 class CheckInSystem:
-    def __init__(self, debug_level=0):
+    def __init__(self, debug_level=0, db_name='reservations'):
         """ Constructor
 
         debug_level (int): O-2. The higher the debug level, the more verbose.
         """
         self.THREAD_POLLING_RATE_SECONDS = 1 # seconds
-        self.reservation_manager = ReservationManager(debug_level)
+        self.reservation_manager = ReservationManager(debug_level, db_name)
         self.southwest_api = SouthwestApi(debug_level)
         self.check_in_thread = threading.Thread(target=self._check_in_flight)
         self.run_thread = True
@@ -48,7 +48,7 @@ class CheckInSystem:
             if self._get_current_time() < self.reservation_manager.get_first_reservation().get_check_in_time():
                 reservation = self.reservation_manager.get_first_reservation()
                 self.logger._log2(f"Thread found reservation for {reservation.first_name} {reservation.last_name}, but is not\
-                           time to check in yet")
+                                  time to check in yet")
                 continue
 
             reservation = self.reservation_manager.get_first_reservation()
