@@ -6,13 +6,13 @@ class Logger:
     """
     def __init__(self, debug_level):
         self.debug = debug_level
-    def _log0(self, x):
+    def _log0(self, *x):
         print(x)
 
-    def _log1(self, x):
+    def _log1(self, *x):
         if self.debug >= 1:
             print(x)
 
-    def _log2(self, x):
+    def _log2(self, *x):
         if self.debug >= 2:
             print(x)

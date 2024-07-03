@@ -233,6 +233,7 @@ class CheckInSystemTest(unittest.TestCase):
         # Since the new system has its own check in thread, we need to delete it to make
         # sure the thread joins too
         newsystem.__del__()
+
 if __name__ == '__main__':
     valid_verbosity_levels = range(0, 3)
     parser = argparse.ArgumentParser()
