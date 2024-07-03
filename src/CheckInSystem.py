@@ -53,7 +53,9 @@ class CheckInSystem:
 
             reservation = self.reservation_manager.get_first_reservation()
             if self.southwest_api.check_in_flight(reservation) == HttpCode.SUCCESS:
-                self.reservation_manager.pop_reservation()
+                ec = self.reservation_manager.pop_reservation()
+                if ec != ErrorCode.SUCCESS:
+                    self.logger._log2(f"Unable to remove reservation {reservation.reservation_number} with error code {ec}")
             else:
                 self.logger._log2(f"Unable to check in for flight {reservation.reservation_number}. Trying again")
 

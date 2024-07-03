@@ -3,6 +3,7 @@ import sys
 import time
 import unittest
 from unittest.mock import MagicMock
+import heapq
 
 sys.path.append('src')
 from CheckInSystem import *
@@ -89,7 +90,9 @@ class SouthwestApiTest(unittest.TestCase):
 
     def test_check_in_unknown_reservation(self):
         res = ReservationInfo('Andy', 'Hsu', 'HSUMAN', 0)
-        self.assertEqual(self.api.check_in_flight(res), HttpCode.RESERVATION_NOT_FOUND.value)
+        result = self.api.check_in_flight(res)
+        self.assertTrue(result == HttpCode.RESERVATION_NOT_FOUND.value or\
+                        result == HttpCode.FORBIDDEN.value)
 
 
 class CheckInSystemProxy(CheckInSystem):
@@ -109,7 +112,7 @@ class CheckInSystemProxy(CheckInSystem):
         self.add_reservation(first_name, last_name, reservation_number)
 
     def _get_current_time(self) -> int:
-        self.current_time = self.current_time + 1
+        self.current_time = self.current_time + self.polling_time_seconds
         return self.current_time
 
 class CheckInSystemTest(unittest.TestCase):
@@ -233,6 +236,25 @@ class CheckInSystemTest(unittest.TestCase):
             prev = obj[4]
         # Since the new system has its own check in thread, we need to delete it to make
         # sure the thread joins too
+        newsystem.__del__()
+
+    def test_init_from_persistence_check_heap(self):
+        expected_times = [0, 1, 4, 7, 9]
+        self.system.create_reservation_force_check_in_time("Danny", "Tran", "LNJ653", 1)
+        self.system.create_reservation_force_check_in_time("Andy", "Hsu", "LAJ653", 0)
+        self.system.create_reservation_force_check_in_time("Tim", "Blah", "AAAAB3", 4)
+        self.system.create_reservation_force_check_in_time("Jack", "Blah", "AAAAB4", 9)
+        self.system.create_reservation_force_check_in_time("rob", "Blah", "AAAAB5", 7)
+        # Stop the thread that will pop from 
+        self.system.run_thread = False
+        newsystem = CheckInSystemProxy(verbosity, 'test_db')
+        newsystem.run_thread = False
+        reservation_heap = newsystem.reservation_manager.reservation_heap
+        i = 0
+        while len(reservation_heap) > 0:
+            res = heapq.heappop(reservation_heap)
+            self.assertEqual(res.check_in_time, expected_times[i])
+            i += 1
         newsystem.__del__()
 
 if __name__ == '__main__':

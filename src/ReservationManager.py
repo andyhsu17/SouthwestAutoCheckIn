@@ -12,6 +12,7 @@ class ErrorCode(Enum):
     SUCCESS = 0
     RESERVATION_EXISTS = 1
     UNKNOWN_RESERVATION = 2
+    NO_RESERVATIONS = 3
 
 
 class ReservationManager:
@@ -22,6 +23,7 @@ class ReservationManager:
         self.logger = Logger(debug_level)
         self.db = db(db_name, debug_level)
         self.reservation_heap = [TupleToReservationInfo(reservation_tuple[1:]) for reservation_tuple in self.db.get_all()]
+        self.logger._log2("Initializing reservations from database")
         for obj in self.reservation_heap:
             self.logger._log2(obj.check_in_time, obj.reservation_number, obj.first_name, obj.last_name)
         heapq.heapify(self.reservation_heap)
@@ -41,6 +43,11 @@ class ReservationManager:
         return ErrorCode.SUCCESS
 
     def pop_reservation(self):
+        """Deletes the reservation from the system with the most recent check in time
+        """
+
+        if not self.reservation_heap:
+            return ErrorCode.NO_RESERVATIONS
         # Delete from heap
         res = heapq.heappop(self.reservation_heap)
         # don't forget to remove it from our set
@@ -73,7 +80,8 @@ class ReservationManager:
                 try:
                     self.db.delete_reservation_by_name(reservation_number)
                 except Exception as e:
-                    self.logger._log0(f"Did not find reservation {reservation_number} in database. Continuing.")
+                    self.logger._log0(f"Did not find reservation {reservation_number} in database. Continuing.\n{e}")
+
                 self.logger._log2(f"Successfully removed reservation: {reservation_number} from system")
                 return ErrorCode.SUCCESS
 

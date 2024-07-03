@@ -9,6 +9,7 @@ class HttpCode(Enum):
     """Http code enum
     """
     SUCCESS = 200
+    FORBIDDEN = 403
     RESERVATION_NOT_FOUND = 404
 
 
