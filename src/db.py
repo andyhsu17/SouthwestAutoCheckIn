@@ -1,13 +1,16 @@
 import mysql.connector
+
 from ReservationInfo import *
+from Logger import Logger
 
 class db:
-    def __init__(self, db_name):
+    def __init__(self, db_name, debug_level):
         # Replace these variables with your MySQL server details
         # self.password = 'your_password'
         self.db_name = db_name
         self.host = '127.0.0.1'  # or the server IP
         self.user = 'root'
+        self.logger = Logger(debug_level)
 
         self.connection = mysql.connector.connect(
             host=self.host,
@@ -32,7 +35,7 @@ class db:
         """)
 
     def add_reservation(self, reservation : ReservationInfo):
-        print(f'Inserting {reservation.reservation_number} into db')
+        self.logger._log2(f'Inserting {reservation.reservation_number} into db')
         return self.insert_data([reservation.get_tuple()])
 
     def add_reservation_list(self, reservation_list : list[ReservationInfo]):
@@ -47,17 +50,17 @@ class db:
         VALUES (%s, %s, %s, %s)
         """
         if not isinstance(data, list) or not all(isinstance(item, tuple) for item in data):
-            print('Malformed data input into db')
+            self.logger._log2('Malformed data input into db')
             return False
 
         self.cursor.executemany(insert_query, data)
 
         self.connection.commit()
 
-        print("Data inserted into 'flights' table")
+        self.logger._log2("Data inserted into 'flights' table")
         return True
 
-    def delete_reservation(self, reservation_number):
+    def delete_reservation_by_name(self, reservation_number):
         delete_query = f"""
         DELETE FROM flights
         WHERE reservation_number = '{reservation_number}';
@@ -65,7 +68,7 @@ class db:
         self.cursor.execute(delete_query)
 
         self.connection.commit()
-        print(f"reservation {reservation_number} deleted from table")
+        self.logger._log2(f"reservation {reservation_number} deleted from table")
 
 
     def get_all(self):
@@ -82,7 +85,7 @@ class db:
         rows = self.cursor.fetchall()
 
         for row in rows:
-            print(row)
+            self.logger._log0(row)
 
     def delete_all(self):
         """ For testing only
@@ -94,4 +97,4 @@ class db:
         # Generate and execute truncate statements for each table
         for (table_name,) in tables:
             self.cursor.execute(f"TRUNCATE TABLE {table_name}")
-            print(f"Truncated table {table_name}")
+            self.logger._log2(f"Truncated table {table_name}")

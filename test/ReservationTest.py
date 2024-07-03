@@ -13,14 +13,14 @@ from db import *
 verbosity = 0
 
 class DbProxy(db):
-    def __init__(self, db_name):
+    def __init__(self, db_name, debug_level):
         self.db_name = db_name
-        super(DbProxy, self).__init__(self.db_name)
+        super(DbProxy, self).__init__(self.db_name, debug_level)
 
 class DbTest(unittest.TestCase):
     def setUp(self):
         global verbosity
-        self.db = DbProxy('test_db')
+        self.db = DbProxy('test_db', verbosity)
         self.db.create_table()
         self.db.delete_all()
 
@@ -63,7 +63,7 @@ class DbTest(unittest.TestCase):
         data = self.db.get_all()
         self.assertEqual(len(data), 2)
         self.db.print_all()
-        self.db.delete_reservation('HSUMAN')
+        self.db.delete_reservation_by_name('HSUMAN')
         # self.assertEqual(len(data), 1)
         data = self.db.get_all()
         self.assertEqual(data[0][3], 'NEWRES')
@@ -73,7 +73,7 @@ class DbTest(unittest.TestCase):
         self.db.insert_data([res.get_tuple()])
         res = ReservationInfo('Tim', 'Kang', 'TIMMAN', 1)
         self.db.insert_data([res.get_tuple()])
-        new_db = DbProxy('test_db')
+        new_db = DbProxy('test_db', verbosity)
         data = new_db.get_all()
         self.assertEqual(data[0][3], 'HSUMAN')
         self.assertEqual(data[1][3], 'TIMMAN')
@@ -149,7 +149,7 @@ class CheckInSystemTest(unittest.TestCase):
         self.system.add_reservation("Andy", "Hsu", "KNJ653")
         self.assertEqual(self.system.get_first_reservation().first_name, "Andy")
         self.assertEqual(self.system.get_number_of_reservations(), 1)
-        self.system.delete_reservation("KNJ653")
+        self.system.delete_reservation_by_name("KNJ653")
         self.assertEqual(self.system.get_first_reservation(), None)
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
@@ -157,7 +157,7 @@ class CheckInSystemTest(unittest.TestCase):
         self.system.add_reservation("Candy", "Hsu", "PEE1NA")
         self.assertEqual(self.system.get_number_of_reservations(), 2)
 
-        self.system.delete_reservation("PEE1NA")
+        self.system.delete_reservation_by_name("PEE1NA")
         self.assertEqual(self.system.get_number_of_reservations(), 1)
 
         self.system.add_reservation("Tim", "Hsu", "UHR249")
@@ -165,20 +165,20 @@ class CheckInSystemTest(unittest.TestCase):
         self.system.add_reservation("Tim", "Hsu", "NWI093")
         self.assertEqual(self.system.get_number_of_reservations(), 4)
 
-        self.system.delete_reservation("UHR249")
-        self.system.delete_reservation("YTE923")
-        self.system.delete_reservation("NWI093")
-        self.system.delete_reservation("L8M194")
+        self.system.delete_reservation_by_name("UHR249")
+        self.system.delete_reservation_by_name("YTE923")
+        self.system.delete_reservation_by_name("NWI093")
+        self.system.delete_reservation_by_name("L8M194")
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
     def test_delete_unknown_reservation(self):
         self.assertEqual(self.system.get_number_of_reservations(), 0)
-        self.assertEqual(self.system.delete_reservation("UHR249"), ErrorCode.UNKNOWN_RESERVATION)
+        self.assertEqual(self.system.delete_reservation_by_name("UHR249"), ErrorCode.UNKNOWN_RESERVATION)
         self.assertEqual(self.system.get_number_of_reservations(), 0)
         self.system.add_reservation("Tim", "Hsu", "UHR249")
         self.assertEqual(self.system.get_number_of_reservations(), 1)
-        self.assertEqual(self.system.delete_reservation("LHR248"), ErrorCode.UNKNOWN_RESERVATION)
-        self.assertEqual(self.system.delete_reservation("UHR249"), ErrorCode.SUCCESS)
+        self.assertEqual(self.system.delete_reservation_by_name("LHR248"), ErrorCode.UNKNOWN_RESERVATION)
+        self.assertEqual(self.system.delete_reservation_by_name("UHR249"), ErrorCode.SUCCESS)
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
     def test_reservation_heap(self):
@@ -212,7 +212,7 @@ class CheckInSystemTest(unittest.TestCase):
         self.assertEqual(self.system.get_number_of_reservations(), 2)
         self.assertEqual(self.system.reservation_manager.db.get_all()[0][3], 'KNJ653')
         self.assertEqual(self.system.reservation_manager.db.get_all()[1][3], 'BILELL')
-        self.system.delete_reservation("KNJ653")
+        self.system.delete_reservation_by_name("KNJ653")
         self.assertEqual(self.system.get_number_of_reservations(), 1)
         self.assertEqual(self.system.reservation_manager.db.get_all()[0][3], 'BILELL')
     
@@ -227,6 +227,7 @@ class CheckInSystemTest(unittest.TestCase):
         newsystem = CheckInSystemProxy(verbosity, 'test_db')
         data = newsystem.reservation_manager.db.get_all()
         prev = -1
+        # Column 4 is check in time
         for i, obj in enumerate(data):
             self.assertTrue(obj[4] > prev)
             prev = obj[4]

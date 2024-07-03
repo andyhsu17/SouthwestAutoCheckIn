@@ -20,10 +20,11 @@ class ReservationManager:
     def __init__(self, debug_level, db_name):
         self.reservation_numbers = set()
         self.logger = Logger(debug_level)
-        self.db = db(db_name)
+        self.db = db(db_name, debug_level)
         self.reservation_heap = [TupleToReservationInfo(reservation_tuple[1:]) for reservation_tuple in self.db.get_all()]
         for obj in self.reservation_heap:
             self.logger._log2(obj.check_in_time, obj.reservation_number, obj.first_name, obj.last_name)
+        heapq.heapify(self.reservation_heap)
 
     def add_reservation(self, reservation : ReservationInfo):
         """Adds a reservation to the system
@@ -39,11 +40,23 @@ class ReservationManager:
 
         return ErrorCode.SUCCESS
 
-    def delete_reservation(self, reservation_number : str):
-        """Deletes a reservation from the system
+    def pop_reservation(self):
+        # Delete from heap
+        res = heapq.heappop(self.reservation_heap)
+        # don't forget to remove it from our set
+        self.reservation_numbers.remove(res.reservation_number)
+        try:
+            self.db.delete_reservation_by_name(res.reservation_number)
+        except Exception as e:
+            self.logger._log2(f"Did not find reservation {res.reservation_number} in database. Continuing.")
+        self.logger._log2(f"Successfully removed reservation: {res.reservation_number} from system")
+        return ErrorCode.SUCCESS
+
+    def delete_reservation_by_name(self, reservation_number : str):
+        """Deletes a reservation from the system by name
 
         Args:
-            reservation_number (str): Reservation to deletee
+            reservation_number (str): Reservation to delete
         """
 
         if not reservation_number in self.reservation_numbers:
@@ -58,7 +71,7 @@ class ReservationManager:
                 # don't forget to remove it from our set
                 self.reservation_numbers.remove(reservation_number)
                 try:
-                    self.db.delete_reservation(reservation_number)
+                    self.db.delete_reservation_by_name(reservation_number)
                 except Exception as e:
                     self.logger._log2(f"Did not find reservation {reservation_number} in database. Continuing.")
                 self.logger._log2(f"Successfully removed reservation: {reservation_number} from system")

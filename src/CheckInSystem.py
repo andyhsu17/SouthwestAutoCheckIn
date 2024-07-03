@@ -53,7 +53,7 @@ class CheckInSystem:
 
             reservation = self.reservation_manager.get_first_reservation()
             if self.southwest_api.check_in_flight(reservation) == HttpCode.SUCCESS:
-                self.reservation_manager.delete_reservation(reservation.reservation_number)
+                self.reservation_manager.pop_reservation()
             else:
                 self.logger._log2(f"Unable to check in for flight {reservation.reservation_number}. Trying again")
 
@@ -70,8 +70,8 @@ class CheckInSystem:
         reservation = ReservationInfo(first_name, last_name, reservation_number, check_in_time)
         return self.reservation_manager.add_reservation(reservation)
             
-    def delete_reservation(self, reservation_number : str):
-        return self.reservation_manager.delete_reservation(reservation_number)
+    def delete_reservation_by_name(self, reservation_number : str):
+        return self.reservation_manager.delete_reservation_by_name(reservation_number)
 
     def get_first_reservation(self):
         return self.reservation_manager.get_first_reservation()
