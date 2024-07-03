@@ -22,6 +22,7 @@ class CheckInSystem:
         self.check_in_thread.start()
         self.polling_time_seconds = 2 # Period to see if its time to check in yet
         self.ONE_DAY_IN_SECONDS = 24 * 60 * 60
+        self.MAX_RETRIES = 10
         self.logger = Logger(debug_level)
 
     def __del__(self):
@@ -38,6 +39,7 @@ class CheckInSystem:
         return time.time()
 
     def _check_in_flight(self):
+        retry_count = 0
         while self.run_thread is True:
             time.sleep(self.THREAD_POLLING_RATE_SECONDS)
             self.logger._log2(f"running thread with {self.reservation_manager.get_number_of_reservations()} in queue")
@@ -53,11 +55,18 @@ class CheckInSystem:
 
             reservation = self.reservation_manager.get_first_reservation()
             if self.southwest_api.check_in_flight(reservation) == HttpCode.SUCCESS:
+                retry_count = 0
                 ec = self.reservation_manager.pop_reservation()
                 if ec != ErrorCode.SUCCESS:
                     self.logger._log2(f"Unable to remove reservation {reservation.reservation_number} with error code {ec}")
             else:
-                self.logger._log2(f"Unable to check in for flight {reservation.reservation_number}. Trying again")
+                self.logger._log2(f"Unable to check in for flight {reservation.reservation_number}. Retry count: {retry_count}")
+                retry_count += 1
+                if (retry_count >= self.MAX_RETRIES):
+                    self.logger._log0(f"Trying to check in for flight {reservation.reservation_number} reached the\
+                                      max retry count. Removing the reservation")
+                    self.reservation_manager.pop_reservation()
+                    retry_count = 0
 
     def add_reservation(self, first_name : str, last_name : str, reservation_number : str):
         """ Adds a reservation to the system
