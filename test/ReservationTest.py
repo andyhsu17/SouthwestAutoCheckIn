@@ -209,6 +209,10 @@ class CheckInSystemTest(unittest.TestCase):
         time.sleep(3)
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
+    def test_empty_db(self):
+        self.assertEqual(self.system.reservation_manager.db.get_all(), [])
+        self.assertEqual(self.system.get_number_of_reservations(), 0)
+
     def test_add_to_db(self):
         self.system.add_reservation("Andy", "Hsu", "KNJ653")
         self.system.add_reservation("Matt", "Bilello", "BILELL")
