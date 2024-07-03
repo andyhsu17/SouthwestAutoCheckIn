@@ -7,7 +7,7 @@ class Logger:
     def __init__(self, debug_level):
         self.debug = debug_level
     def _log0(self, *x):
-        print(x)
+        print("ERROR:", x)
 
     def _log1(self, *x):
         if self.debug >= 1:

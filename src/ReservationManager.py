@@ -48,7 +48,7 @@ class ReservationManager:
         try:
             self.db.delete_reservation_by_name(res.reservation_number)
         except Exception as e:
-            self.logger._log2(f"Did not find reservation {res.reservation_number} in database. Continuing.")
+            self.logger._log0(f"Did not find reservation {res.reservation_number} in database. Continuing.")
         self.logger._log2(f"Successfully removed reservation: {res.reservation_number} from system")
         return ErrorCode.SUCCESS
 
@@ -73,7 +73,7 @@ class ReservationManager:
                 try:
                     self.db.delete_reservation_by_name(reservation_number)
                 except Exception as e:
-                    self.logger._log2(f"Did not find reservation {reservation_number} in database. Continuing.")
+                    self.logger._log0(f"Did not find reservation {reservation_number} in database. Continuing.")
                 self.logger._log2(f"Successfully removed reservation: {reservation_number} from system")
                 return ErrorCode.SUCCESS
 

@@ -35,7 +35,7 @@ class DbTest(unittest.TestCase):
         self.assertEqual(self.db.insert_data([res.get_tuple()]), True)
         data = self.db.get_all()
         self.assertEqual(len(data), 1)
-        # row 0, column 3 is reservation number
+        # row 0, column 3 is reservation number of first entry
         self.assertEqual(data[0][3], 'HSUMAN')
 
     def test_add_multiple_to_db(self):
