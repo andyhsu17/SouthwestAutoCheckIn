@@ -9,7 +9,7 @@ from SouthwestApi import *
 from Logger import Logger
 
 class CheckInSystem:
-    def __init__(self, debug_level=0, db_name='reservations'):
+    def __init__(self, debug_level=0, db_name='reservations', should_run_thread=True):
         """ Constructor
 
         debug_level (int): O-2. The higher the debug level, the more verbose.
@@ -18,7 +18,7 @@ class CheckInSystem:
         self.reservation_manager = ReservationManager(debug_level, db_name)
         self.southwest_api = SouthwestApi(debug_level)
         self.check_in_thread = threading.Thread(target=self._check_in_flight)
-        self.run_thread = True
+        self.run_thread = should_run_thread
         self.check_in_thread.start()
         self.polling_time_seconds = 2 # Period to see if its time to check in yet
         self.ONE_DAY_IN_SECONDS = 24 * 60 * 60
@@ -93,12 +93,3 @@ class CheckInSystem:
     def printReservationsByName(self):
         for res in self.reservation_manager.reservation_heap:
             print(f"{res.first_name} {res.last_name}")
-
-def main():
-    system = CheckInSystem()
-
-    # while True:
-    #     pass
-
-if __name__ == '__main__':
-    main()

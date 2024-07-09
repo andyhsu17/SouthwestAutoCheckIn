@@ -25,6 +25,7 @@ class ReservationManager:
         self.reservation_heap = [TupleToReservationInfo(reservation_tuple[1:]) for reservation_tuple in self.db.get_all()]
         self.logger._log2("Initializing reservations from database")
         for obj in self.reservation_heap:
+            self.reservation_numbers.add(obj.reservation_number)
             self.logger._log2(obj.check_in_time, obj.reservation_number, obj.first_name, obj.last_name)
         heapq.heapify(self.reservation_heap)
 
