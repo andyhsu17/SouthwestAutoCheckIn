@@ -108,7 +108,7 @@ class CheckInSystemProxy(CheckInSystem):
         self.southwest_api.get_flight_time=MagicMock(return_value=seconds_until_checkin + self.ONE_DAY_IN_SECONDS)
 
         # Fake southwest api to make sure it is always successful
-        self.southwest_api.check_in_flight=MagicMock(return_value=HttpCode.SUCCESS)
+        self.southwest_api.check_in_flight=MagicMock(return_value=HttpCode.SUCCESS.value)
         self.add_reservation(first_name, last_name, reservation_number)
 
     def _get_current_time(self) -> int:
@@ -206,7 +206,7 @@ class CheckInSystemTest(unittest.TestCase):
         self.system.create_reservation_force_check_in_time("Danny", "Tran", "LNJ653", 2)
         self.assertEqual(self.system.get_first_reservation().first_name, "Danny")
         self.assertEqual(self.system.get_number_of_reservations(), 1)
-        time.sleep(3)
+        time.sleep(2)
         self.assertEqual(self.system.get_number_of_reservations(), 0)
 
     def test_empty_db(self):

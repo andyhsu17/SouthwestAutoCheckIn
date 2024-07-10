@@ -6,16 +6,30 @@ import axios from 'axios';
 import DateTimePicker from 'react-datetime-picker'
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
+import TimezoneSelect, { type ITimezone } from "react-timezone-select"
 
 function RegisterApp() {
   const [formData, setFormData] = React.useState({
     firstName: '',
     lastName: '',
     reservationNumber: '',
-    date: new Date()
+    date: new Date(),
+    // timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
   });
 
+  const handleTimezoneChange = (time_zone_in) => {
+    setFormData(prevState => ({
+      ...prevState,
+      timeZone: time_zone_in
+    }));
+  };
+
+  const handleDateChange = (date_in) => {
+    setFormData(prevState => ({
+      ...prevState,
+      date: date_in
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,14 +96,39 @@ function RegisterApp() {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="reservationDate">Reservation Date</label>
+              <label htmlFor="reservationDate">Flight Time</label>
                   <DateTimePicker
-                    id="reservationDate"
+                    id="date"
                     value={formData.date}
-                    onChange={handleChange}
+                    onChange={handleDateChange}
                     required
                   />
             </div>
+      {/* <h2>react-timezone-select</h2>
+      <blockquote>Please make a selection</blockquote>
+      <div className="select-wrapper">
+        <TimezoneSelect value={formData.timeZone} onChange={handleTimezoneChange} />
+      </div> */}
+      {/* <h3>Output:</h3>
+      <div
+        style={{
+          backgroundColor: "#ccc",
+          padding: "20px",
+          margin: "20px auto",
+          borderRadius: "5px",
+          maxWidth: "600px",
+        }}
+      >
+        <pre
+          style={{
+            margin: "0 20px",
+            fontWeight: 500,
+            fontFamily: "monospace",
+          }}
+        >
+        JSON.stringify(formData.timeZone, null, 2)}
+        </pre>
+      </div> */}
             <button type="submit" className="btn-primary">Submit Reservation</button>
               <Routes>
                 <Route 

@@ -15,7 +15,6 @@ function App() {
               element={
                 <section className="page-content">
                   <RegisterApp />
-                  <Link to="/remove">Delete Your Auto Check In Reservation</Link>
                 </section>
               } 
             />
@@ -24,7 +23,6 @@ function App() {
               element={
                 <section className="page-content">
                   <DeleteForm />
-                  <Link to="/">Go back to Registration</Link>
                 </section>
               } 
             />

@@ -9,21 +9,22 @@ from SouthwestApi import *
 from Logger import Logger
 
 class CheckInSystem:
+    started = False
     def __init__(self, debug_level=0, db_name='reservations', should_run_thread=True):
         """ Constructor
 
         debug_level (int): O-2. The higher the debug level, the more verbose.
         """
-        self.THREAD_POLLING_RATE_SECONDS = 1 # seconds
+        self.THREAD_POLLING_RATE_SECONDS = 2 # seconds
         self.reservation_manager = ReservationManager(debug_level, db_name)
         self.southwest_api = SouthwestApi(debug_level)
-        self.check_in_thread = threading.Thread(target=self._check_in_flight)
+        self.check_in_thread = threading.Thread(target=self._check_in_flight, daemon=True)
         self.run_thread = should_run_thread
-        self.check_in_thread.start()
         self.polling_time_seconds = 2 # Period to see if its time to check in yet
         self.ONE_DAY_IN_SECONDS = 24 * 60 * 60
         self.MAX_RETRIES = 10
         self.logger = Logger(debug_level)
+        self.check_in_thread.start()
 
     def __del__(self):
         self.run_thread = False
@@ -54,11 +55,14 @@ class CheckInSystem:
                 continue
 
             reservation = self.reservation_manager.get_first_reservation()
-            if self.southwest_api.check_in_flight(reservation) == HttpCode.SUCCESS:
+            code = self.southwest_api.check_in_flight(reservation)
+            if code == HttpCode.FULFILLED.value or code == HttpCode.SUCCESS.value:
                 retry_count = 0
-                ec = self.reservation_manager.pop_reservation()
-                if ec != ErrorCode.SUCCESS:
-                    self.logger._log2(f"Unable to remove reservation {reservation.reservation_number} with error code {ec}")
+                pop_ec = self.reservation_manager.pop_reservation()
+                if pop_ec != ErrorCode.SUCCESS:
+                    self.logger._log2(f"Unable to remove reservation {reservation.reservation_number} with error code {pop_ec}")
+                else:
+                    self.logger._log0(f"Successfully checked in {reservation.reservation_number} ")
             else:
                 self.logger._log2(f"Unable to check in for flight {reservation.reservation_number}. Retry count: {retry_count}")
                 retry_count += 1
@@ -67,6 +71,7 @@ class CheckInSystem:
                                       max retry count. Removing the reservation")
                     self.reservation_manager.pop_reservation()
                     retry_count = 0
+        self.logger._log2('Breaking out of thread')
 
     def add_reservation(self, first_name : str, last_name : str, reservation_number : str):
         """ Adds a reservation to the system
