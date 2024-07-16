@@ -6,21 +6,20 @@ import axios from 'axios';
 import DateTimePicker from 'react-datetime-picker'
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import TimezoneSelect, { type ITimezone } from "react-timezone-select"
 
 function RegisterApp() {
   const [formData, setFormData] = React.useState({
     firstName: '',
     lastName: '',
     reservationNumber: '',
-    date: new Date(),
-    // timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    timeZone: '',
+    date: new Date()
   });
 
   const handleTimezoneChange = (time_zone_in) => {
     setFormData(prevState => ({
       ...prevState,
-      timeZone: time_zone_in
+      timeZone: time_zone_in.target.value
     }));
   };
 
@@ -42,7 +41,7 @@ function RegisterApp() {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      const response = axios.post('http://127.0.0.1:5000/register',   formData)
+      const response = axios.post('http://127.0.0.1:5000/register', formData)
       .then(response => {
         alert(response.data.message);
       })
@@ -104,31 +103,20 @@ function RegisterApp() {
                     required
                   />
             </div>
-      {/* <h2>react-timezone-select</h2>
-      <blockquote>Please make a selection</blockquote>
-      <div className="select-wrapper">
-        <TimezoneSelect value={formData.timeZone} onChange={handleTimezoneChange} />
-      </div> */}
-      {/* <h3>Output:</h3>
-      <div
-        style={{
-          backgroundColor: "#ccc",
-          padding: "20px",
-          margin: "20px auto",
-          borderRadius: "5px",
-          maxWidth: "600px",
-        }}
-      >
-        <pre
-          style={{
-            margin: "0 20px",
-            fontWeight: 500,
-            fontFamily: "monospace",
-          }}
-        >
-        JSON.stringify(formData.timeZone, null, 2)}
-        </pre>
-      </div> */}
+      <div className="form-group">
+          <label htmlFor="timeZone">
+            Time Zone:
+            <select id="timeZone" value={formData.timeZone} onChange={handleTimezoneChange} required>
+              <option value="">Please Choose a Time Zone</option>
+              <option value="PST">PST</option>
+              <option value="HAST">HAST</option>
+              <option value="AKST">AKST</option>
+              <option value="MST">MST</option>
+              <option value="CST">CST</option>
+              <option value="EST">EST</option>
+            </select>
+          </label>
+      </div>
             <button type="submit" className="btn-primary">Submit Reservation</button>
               <Routes>
                 <Route 

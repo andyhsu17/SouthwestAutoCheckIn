@@ -19,7 +19,9 @@ def create_app():
         last_name = data.get('lastName')
         reservation_number = data.get('reservationNumber')
         date = data.get('date')
-        print(date, "\n")
+        time_zone = data.get('timeZone')
+        print(date, end='\n')
+        print(time_zone, end='\n')
         # date_str = data.get('date') # MM/DD/YYYY
         # time = data.get('time') # HH:MM
         # time_zone = data.get('time_zone') #  HAST AKST PST MST CST EST
